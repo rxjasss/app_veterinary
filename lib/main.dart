@@ -23,20 +23,11 @@ class AppState extends StatelessWidget {
           create: (_) => UserService(),
           lazy: false,
         ),
-        ChangeNotifierProvider(
-          create: (_) => GetCompanies(),
-          lazy: false,
-        ),
+       
         ChangeNotifierProvider(
           create: (_) => VerifyService(),
           lazy: false,
         ),
-       
-        ChangeNotifierProvider(
-          create: (_) => ProductFormProvider(),
-        ),
-
-        // ChangeNotifierProvider(create: (_) => AuthService()),
       ],
       child: MyApp(),
     );
@@ -64,7 +55,6 @@ class MyApp extends StatelessWidget {
           'home': (_) => const HomeScreen(),
           'login': (_) => const LoginScreen(),
           'register': (_) => const RegisterScreen(),
-          'catalog': (_) => const UserScreen(),
         },
         scaffoldMessengerKey: NotificationsService.messengerKey,
         theme: ThemeData.light().copyWith(

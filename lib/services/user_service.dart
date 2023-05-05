@@ -12,34 +12,10 @@ import 'package:app_veterinary/Models/models.dart';
 class UserService extends ChangeNotifier {
   final String _baseUrl = 'semillero.allsites.es';
   bool isLoading = true;
-  final List<UserData> usuarios = [];
+  
   String usuario = "";
   final storage = const FlutterSecureStorage();
 
-  Future<List<UserData>> getUsers() async {
-    final url = Uri.http(_baseUrl, '/public/api/users');
-    String? token = await AuthService().readToken();
-    isLoading = true;
-    notifyListeners();
-    final resp = await http.get(
-      url,
-      headers: {
-        'Content-type': 'application/json',
-        'Accept': 'application/json',
-        "Authorization": "Bearer $token"
-      },
-    );
-    final Map<String, dynamic> decodedResp = json.decode(resp.body);
-    var user = Users.fromJson(decodedResp);
-    for (var i in user.data!) {
-      if (i.deleted == 0) {
-        usuarios.add(i);
-      }
-    }
-    isLoading = false;
-    notifyListeners();
-    return usuarios;
-  }
 
   getUser() async {
     String? token = await AuthService().readToken();
@@ -118,25 +94,5 @@ class UserService extends ChangeNotifier {
   }
 }
 
-class GetCompanies extends ChangeNotifier {
-  final String _baseUrl = 'semillero.allsites.es';
 
-  List<Companies> getAllCompanies = [];
 
-  GetCompanies() {
-    print('Inicializando');
-
-    getCompaniesName();
-  }
-
-  getCompaniesName() async {
-    print('INCOMPANIES');
-    var url = Uri.http(_baseUrl, '/public/api/companies');
-
-    final response = await http.get(url);
-    final companiesResponse = CompaniesResponse.fromJson(response.body);
-
-    getAllCompanies = companiesResponse.data;
-    notifyListeners();
-  }
-}

@@ -14,21 +14,19 @@ class AuthService extends ChangeNotifier {
 
   // Si retornamos algo, es un error, si no, todo bien!
   Future<String?> createUser(
-    String firstname,
-    String secondname,
-    String email,
+    String name,
+    String surname,
+    String username,
     String password,
     String cpassword,
-    int cicleid,
     /*int courseId*/
   ) async {
     final Map<String, dynamic> authData = {
-      'firstname': firstname,
-      'secondname': secondname,
-      'email': email,
+      'name': name,
+      'surname': surname,
+      'username': username,
       'password': password,
       'c_password': cpassword,
-      'company_id': cicleid,
     };
     print(authData.toString());
 

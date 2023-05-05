@@ -11,22 +11,6 @@ import 'package:app_veterinary/ui/input_decorations.dart';
 
 import '../providers/providers.dart';
 
-// class getCicles extends ChangeNotifier {
-//   String _baseUrl = 'http://salesin.allsites.es/public/api/cicles';
-
-//   CiclesProvider() {
-//     print('Inicializando');
-//   }
-
-//   getCiclesName() async {
-//     var url = Uri.https(_baseUrl);
-
-//     final response = await http.get(url);
-
-//     print(response.body);
-//   }
-// }
-
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({Key? key}) : super(key: key);
 
@@ -42,7 +26,7 @@ class RegisterScreen extends StatelessWidget {
               child: Column(
             children: [
               const SizedBox(height: 10),
-              Text('Crear cuenta',
+              Text('Create account',
                   style: Theme.of(context).textTheme.headline4),
               const SizedBox(height: 30),
               ChangeNotifierProvider(
@@ -57,7 +41,7 @@ class RegisterScreen extends StatelessWidget {
                       MaterialStateProperty.all(Colors.indigo.withOpacity(0.1)),
                   shape: MaterialStateProperty.all(const StadiumBorder())),
               child: const Text(
-                '¿Ya tienes una cuenta?',
+                'Do you have an account?',
                 style: TextStyle(fontSize: 18, color: Colors.black87),
               )),
           const SizedBox(height: 50),
@@ -70,22 +54,12 @@ class RegisterScreen extends StatelessWidget {
 class _RegisterForm extends StatelessWidget with InputValidationMixin {
   @override
   Widget build(BuildContext context) {
-    final ciclesProvider = Provider.of<GetCompanies>(context);
-    List<Companies> ciclos = ciclesProvider.getAllCompanies;
-    List<Companies> options = [];
-    if (ciclos.isNotEmpty) {
-      for (var i = 0; i < ciclos.length; i++) {
-        options.add(ciclos[i]);
-      }
-    }
 
     final registerForm = Provider.of<RegisterFormProvider>(context);
 
     return Form(
       key: registerForm.formKey,
-      // autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
-        // ignore: sort_child_properties_last
         children: [
           TextFormField(
             autocorrect: false,
@@ -115,19 +89,17 @@ class _RegisterForm extends StatelessWidget with InputValidationMixin {
               }
             },
           ),
-          TextFormField(
+            TextFormField(
             autocorrect: false,
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.name,
             decoration: InputDecorations.authInputDecoration(
-                hintText: 'john.doe@gmail.com',
-                labelText: 'Correo electrónico',
-                prefixIcon: Icons.alternate_email_rounded),
-            onChanged: (value) => registerForm.email = value,
-            validator: (email) {
-              if (isEmailValid(email)) {
+                hintText: '', labelText: 'Username', prefixIcon: Icons.person),
+            onChanged: (value) => registerForm.username = value,
+            validator: (username) {
+              if (isTextValid(username)) {
                 return null;
               } else {
-                return 'Enter a valid email address';
+                return 'Surname field cant be null';
               }
             },
           ),
@@ -137,7 +109,7 @@ class _RegisterForm extends StatelessWidget with InputValidationMixin {
             keyboardType: TextInputType.text,
             decoration: InputDecorations.authInputDecoration(
                 hintText: '*******',
-                labelText: 'Contraseña',
+                labelText: 'Password',
                 prefixIcon: Icons.lock_outline),
             onChanged: (value) => registerForm.password = value,
             validator: (password) {
@@ -161,34 +133,9 @@ class _RegisterForm extends StatelessWidget with InputValidationMixin {
               if (value != registerForm.password) {
                 return "The passwords don't match";
               } else if (value == '') {
-                return "The password cant be null";
+                return "The password can't be null";
               }
               return null;
-            },
-          ),
-          DropdownButtonFormField<Companies>(
-            decoration: InputDecorations.authInputDecoration(
-                prefixIcon: Icons.view_week_outlined,
-                hintText: '',
-                labelText: 'Company'),
-            // value: selectedItem,
-            items: options
-                .map(
-                  (courseName) => DropdownMenuItem(
-                    value: courseName,
-                    child: Text(courseName.nameCompanie),
-                  ),
-                )
-                .toList(),
-            onChanged: (value) {
-              registerForm.cicleid = (value?.idCompanie.toInt())!;
-            },
-            validator: (cicle) {
-              if (isCicleValid(cicle)) {
-                return null;
-              } else {
-                return 'Select a companie';
-              }
             },
           ),
           const SizedBox(height: 30),
@@ -213,10 +160,9 @@ class _RegisterForm extends StatelessWidget with InputValidationMixin {
                       final String? errorMessage = await authService.createUser(
                           registerForm.name,
                           registerForm.surname,
-                          registerForm.email,
+                          registerForm.username,
                           registerForm.password,
-                          registerForm.cpassword,
-                          registerForm.cicleid);
+                          registerForm.cpassword);
                       if (errorMessage == null) {
                         Navigator.pushReplacementNamed(context, 'login');
                       } else {
@@ -231,7 +177,7 @@ class _RegisterForm extends StatelessWidget with InputValidationMixin {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                   child: Text(
-                    registerForm.isLoading ? 'Espere' : 'Registrar',
+                    registerForm.isLoading ? 'Wait' : 'Register',
                     style: const TextStyle(color: Colors.white),
                   )))
         ],
@@ -258,13 +204,4 @@ mixin InputValidationMixin {
   bool isTextValid(texto) => texto.length > 0;
 
   bool isPasswordValid(password) => password.length > 6;
-
-  bool isCicleValid(cicle) => cicle != null;
-
-  bool isEmailValid(email) {
-    String pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = RegExp(pattern);
-    return regExp.hasMatch(email);
-  }
 }
