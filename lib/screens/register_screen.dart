@@ -157,17 +157,18 @@ class _RegisterForm extends StatelessWidget with InputValidationMixin {
                       registerForm.isLoading = true;
 
                       //validar si el login es correcto
-                      final String? errorMessage = await authService.createUser(
-                          registerForm.name,
-                          registerForm.surname,
+                      final String? errorMessage = await authService.register(
+                          //registerForm.name,
+                          //registerForm.surname,
                           registerForm.username,
                           registerForm.password,
-                          registerForm.cpassword);
+                          //registerForm.cpassword
+                          );
                       if (errorMessage == null) {
                         Navigator.pushReplacementNamed(context, 'login');
                       } else {
                         //mostrar error en pantalla
-                        // customToast('The email is already registered', context);
+                        //customToast('The username is already registered', context);
                         registerForm.isLoading = false;
                         print(errorMessage);
                       }
@@ -203,5 +204,5 @@ class _RegisterForm extends StatelessWidget with InputValidationMixin {
 mixin InputValidationMixin {
   bool isTextValid(texto) => texto.length > 0;
 
-  bool isPasswordValid(password) => password.length > 6;
+  bool isPasswordValid(password) => password.length >= 6;
 }

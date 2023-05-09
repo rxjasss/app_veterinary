@@ -53,8 +53,8 @@ class MyApp extends StatelessWidget {
         initialRoute: 'login',
         routes: {
           'home': (_) => const HomeScreen(),
-          'login': (_) => const LoginScreen(),
-          'register': (_) => const RegisterScreen(),
+          'login': (_) =>  LoginScreen(),
+          'register': (_) =>  RegisterScreen(),
         },
         scaffoldMessengerKey: NotificationsService.messengerKey,
         theme: ThemeData.light().copyWith(

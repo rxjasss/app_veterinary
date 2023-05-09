@@ -108,15 +108,17 @@ class _LoginForm extends StatelessWidget {
                     // validar si el login es correcto
                     final String? data = await authService.login(
                         loginForm.username, loginForm.password);
+                        print("DATOS");
+                        print(data);
                     final spliter = data?.split(',');
 
-                    if (spliter?[0] == 'a') {
+                    if (spliter?[0] == 'ROLE_VETERINARY') {
                       Navigator.pushReplacementNamed(context, 'admin');
                       // ignore: unrelated_type_equality_checks
-                    } else if (spliter?[0] == 'u' && spliter?[1] == 0) {
+                    } else if (spliter?[0] == 'ROLE_USER' && spliter?[1] == 0) {
                       customToast('User is not enabled', context);
-                    } else if (spliter?[0] == 'u') {
-                      Navigator.pushReplacementNamed(context, 'user');
+                    } else if (spliter?[0] == 'ROLE_USER') {
+                      Navigator.pushReplacementNamed(context, 'home');
                     } else {
                       customToast('Username or password incorrect', context);
                       Navigator.pushReplacementNamed(context, 'login');
