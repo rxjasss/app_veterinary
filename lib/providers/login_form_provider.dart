@@ -5,6 +5,8 @@ class LoginFormProvider extends ChangeNotifier {
 
   String username = '';
   String password = '';
+  String name = '';
+  String surname = '';
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
