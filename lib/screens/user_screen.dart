@@ -21,19 +21,12 @@ class _UserScreenState extends State<UserScreen> {
   List<Pet> petUser = [];
   List<Pet> pets = [];
   String user = "";
-  int cont = 0;
   bool desactivate = true;
 
   Future getPets() async {
     await petService.getPetsUser(await AuthService().readId());
     setState(() {
       pets = petService.pets;
-
-      cont = pets.length;
-      if (cont >= 5) {
-        desactivate = false;
-      }
-
       petUser = pets;
     });
   }
@@ -62,8 +55,7 @@ class _UserScreenState extends State<UserScreen> {
               x.name!.toLowerCase().contains(enteredKeyword.toLowerCase()))
           .toList();
     }
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
@@ -76,25 +68,47 @@ class _UserScreenState extends State<UserScreen> {
       }
     }
 
-    
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Row(children: [
-          IconButton(
-            icon: const Icon(Icons.login_outlined),
-            onPressed: () {
-              Provider.of<AuthService>(context, listen: false).logout();
-              Navigator.pushReplacementNamed(context, 'login');
-            },
-          ),
           Text(
             'Pets',
           ),
-          Text(
-            '$cont',
-            style: const TextStyle(fontSize: 30),
-          ),
+          PopupMenuButton(
+            itemBuilder: (BuildContext context) {
+              return <PopupMenuEntry>[
+                PopupMenuItem(
+                  child: Row(
+                    children: [
+                      Icon(Icons.login_outlined, color: Colors.blue),
+                      SizedBox(width: 8),
+                      Text('Logout'),
+                    ],
+                  ),
+                  value: 'Opcion 1',
+                ),
+                PopupMenuItem(
+                  child: Row(
+                    children: [
+                      Icon(Icons.account_box_sharp, color: Colors.blue),
+                      SizedBox(width: 8),
+                      Text('User options'),
+                    ],
+                  ),
+                  value: 'Opcion 2',
+                ),
+              ];
+            },
+            onSelected: (value) {
+              if (value == 'Opcion 1') {
+                Provider.of<AuthService>(context, listen: false).logout();
+                Navigator.pushReplacementNamed(context, 'login');
+              } else if (value == 'Opcion 2') {
+                // Lógica para la opción 2
+              }
+            },
+          )
         ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
         centerTitle: true,
       ),
@@ -107,84 +121,94 @@ class _UserScreenState extends State<UserScreen> {
               child: Center(
                 child: Column(
                   children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
                     SizedBox(
                       child: Container(
-                        width: MediaQuery.of(context).size.width / 1.1,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border:
-                                Border.all(color: Colors.blueGrey, width: 1),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: TextField(
-                          onChanged: (value) => _runFilter(value),
-                          decoration: const InputDecoration(
-                            labelText: '    Search',
-                            suffixIcon: Icon(Icons.search),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      child: Container(
-                        child: builListView(context),
+                        child: buildListView(context),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.list), label: 'Pets'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_pin_circle_outlined), label: 'Data'),
-        ],
-        currentIndex: 0, //New
-        onTap: _onItemTapped,
-      ),
     );
   }
 
-  Widget builListView(BuildContext context) {
-    return ListView.separated(
+  Widget buildListView(BuildContext context) {
+    return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.all(30),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 20,
+        mainAxisSpacing: 20,
+      ),
       itemCount: petUser.length,
       itemBuilder: (BuildContext context, index) {
-        return SizedBox(
-          height: 250,
-          child: Card(
-            elevation: 20,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        return Stack(
+          children: [
+            Card(
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('${petUser[index].animal}',
-                            style: const TextStyle(fontSize: 20)),
-                        Text('${petUser[index].breed}',
-                            style: const TextStyle(fontSize: 20))
-                      ]),
-                  const Divider(color: Colors.black),
-                  Text('${petUser[index].name}',
-                      style: const TextStyle(fontSize: 35),
-                      textAlign: TextAlign.center),
-                      Text('${petUser[index].age}',
-                      style: const TextStyle(fontSize: 35),
-                      textAlign: TextAlign.center),
-                  const Divider(color: Colors.black),
-                ]),
-          ),
+                        Text(
+                          '${petUser[index].animal != null ? petUser[index].animal![0].toUpperCase() + petUser[index].animal!.substring(1) : ''}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          '${petUser[index].animal != null ? petUser[index].breed![0].toUpperCase() + petUser[index].breed!.substring(1) : ''}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Divider(color: Colors.black),
+                    Text(
+                      '${petUser[index].name != null ? petUser[index].name![0].toUpperCase() + petUser[index].name!.substring(1) : ''}',
+                      style: const TextStyle(
+                          fontSize: 22, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.start,
+                    ),
+                    Text(
+                      '${petUser[index].age}',
+                      style: const TextStyle(fontSize: 18),
+                      textAlign: TextAlign.start,
+                    ),
+                    Divider(color: Colors.black),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  shape: BoxShape.circle,
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.add, color: Colors.white),
+                  onPressed: () {
+                    // Acción a realizar cuando se presione el botón "+"
+                  },
+                ),
+              ),
+            ),
+          ],
         );
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return const Divider();
       },
     );
   }

@@ -43,7 +43,7 @@ class _PurpleBox extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: size.height,
-      decoration: _purpleBackground(),
+      decoration: _blueBackground(),
       child: Stack(
         children: [
           Positioned(top: 90, left: 30, child: _Bubble()),
@@ -56,10 +56,10 @@ class _PurpleBox extends StatelessWidget {
     );
   }
 
-  BoxDecoration _purpleBackground() => const BoxDecoration(
+  BoxDecoration _blueBackground() => const BoxDecoration(
           gradient: LinearGradient(colors: [
-        Color.fromRGBO(63, 63, 156, 1),
-        Color.fromRGBO(90, 70, 178, 1)
+        Color.fromRGBO(49, 103, 221, 1),
+        Color.fromRGBO(58, 45, 233, 1)
       ]));
 }
 
