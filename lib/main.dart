@@ -1,4 +1,5 @@
 import 'package:app_veterinary/providers/providers.dart';
+import 'package:app_veterinary/screens/update_user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
           'register': (_) =>  RegisterScreen(),
           'userscreen': (_) =>  UserScreen(),
           //'veterinaryscreen': (_) =>  VeterinaryScreen(),
+          'updateuserscreen': (_) => UpdateUserScreen(),
         },
         scaffoldMessengerKey: NotificationsService.messengerKey,
         theme: ThemeData.light().copyWith(

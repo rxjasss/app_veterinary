@@ -76,39 +76,73 @@ class _UserScreenState extends State<UserScreen> {
             'Pets',
           ),
           PopupMenuButton(
-            itemBuilder: (BuildContext context) {
-              return <PopupMenuEntry>[
-                PopupMenuItem(
-                  child: Row(
-                    children: [
-                      Icon(Icons.login_outlined, color: Colors.blue),
-                      SizedBox(width: 8),
-                      Text('Logout'),
-                    ],
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              offset: Offset(0, 50),
+              itemBuilder: (BuildContext context) {
+                return <PopupMenuEntry>[
+                  PopupMenuItem(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.blue.withOpacity(0.1),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.message, color: Colors.blue),
+                          SizedBox(width: 8),
+                          Text('Messages'),
+                        ],
+                      ),
+                    ),
+                    value: 'Opcion 1',
                   ),
-                  value: 'Opcion 1',
-                ),
-                PopupMenuItem(
-                  child: Row(
-                    children: [
-                      Icon(Icons.account_box_sharp, color: Colors.blue),
-                      SizedBox(width: 8),
-                      Text('User options'),
-                    ],
+                  PopupMenuItem(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.blue.withOpacity(0.1),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.account_box_sharp, color: Colors.blue),
+                          SizedBox(width: 8),
+                          Text('User options'),
+                        ],
+                      ),
+                    ),
+                    value: 'Opcion 2',
                   ),
-                  value: 'Opcion 2',
-                ),
-              ];
-            },
-            onSelected: (value) {
-              if (value == 'Opcion 1') {
-                Provider.of<AuthService>(context, listen: false).logout();
-                Navigator.pushReplacementNamed(context, 'login');
-              } else if (value == 'Opcion 2') {
-                // Lógica para la opción 2
-              }
-            },
-          )
+                  PopupMenuItem(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.blue.withOpacity(0.1),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.logout, color: Colors.blue),
+                          SizedBox(width: 8),
+                          Text('Logout'),
+                        ],
+                      ),
+                    ),
+                    value: 'Opcion 3',
+                  ),
+                ];
+              },
+              onSelected: (value) {
+                if (value == 'Opcion 1') {
+                  // Lógica para la opción 1
+                } else if (value == 'Opcion 2') {
+                  Navigator.pushReplacementNamed(context, 'updateuserscreen');
+                } else if (value == 'Opcion 3') {
+                  Provider.of<AuthService>(context, listen: false).logout();
+                  Navigator.pushReplacementNamed(context, 'login');
+                }
+              },
+            )
         ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
         centerTitle: true,
       ),
