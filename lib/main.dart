@@ -1,4 +1,5 @@
 import 'package:app_veterinary/providers/providers.dart';
+import 'package:app_veterinary/screens/messages_user_screen.dart';
 import 'package:app_veterinary/screens/update_user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -59,11 +60,12 @@ class MyApp extends StatelessWidget {
           'userscreen': (_) =>  UserScreen(),
           //'veterinaryscreen': (_) =>  VeterinaryScreen(),
           'updateuserscreen': (_) => UpdateUserScreen(),
+          'messagesuserscreen': (_) => MessagesUserScreen(),
         },
         scaffoldMessengerKey: NotificationsService.messengerKey,
         theme: ThemeData.light().copyWith(
             scaffoldBackgroundColor: Colors.grey[300],
-            appBarTheme: const AppBarTheme(elevation: 0, color: Colors.blue),
+            appBarTheme: const AppBarTheme(elevation: 0, color: Color.fromARGB(255, 36, 57, 247)),
             floatingActionButtonTheme: const FloatingActionButtonThemeData(
                 backgroundColor: Colors.blue, elevation: 0)),
       ),

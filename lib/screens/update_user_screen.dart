@@ -10,26 +10,106 @@ class UpdateUserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Row(children: [
+            Icon(
+              Icons.info,
+            ),
+            Text(
+              'Info',
+            ),
+            PopupMenuButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              offset: Offset(0, 50),
+              itemBuilder: (BuildContext context) {
+                return <PopupMenuEntry>[
+                  PopupMenuItem(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.message, color: Color.fromARGB(255, 36, 57, 247)),
+                          SizedBox(width: 8),
+                          Text('Messages'),
+                        ],
+                      ),
+                    ),
+                    value: 'Opcion 1',
+                  ),
+                  PopupMenuItem(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.pets, color: Color.fromARGB(255, 36, 57, 247)),
+                          SizedBox(width: 8),
+                          Text('Pets'),
+                        ],
+                      ),
+                    ),
+                    value: 'Opcion 2',
+                  ),
+                  PopupMenuItem(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.logout, color: Color.fromARGB(255, 36, 57, 247)),
+                          SizedBox(width: 8),
+                          Text('Logout'),
+                        ],
+                      ),
+                    ),
+                    value: 'Opcion 3',
+                  ),
+                ];
+              },
+              onSelected: (value) {
+                if (value == 'Opcion 1') {
+                  Navigator.pushReplacementNamed(context, 'messagesuserscreen');
+                } else if (value == 'Opcion 2') {
+                  Navigator.pushReplacementNamed(context, 'userscreen');
+                } else if (value == 'Opcion 3') {
+                  Provider.of<AuthService>(context, listen: false).logout();
+                  Navigator.pushReplacementNamed(context, 'login');
+                }
+              },
+            )
+          ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+          centerTitle: true,
+        ),
         body: AuthBackground(
             child: SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(height: 250),
-          CardContainer(
-              child: Column(
+          child: Column(
             children: [
-              SizedBox(height: 10),
-              Text('Update your info',
-                  style: Theme.of(context).textTheme.headline4),
-              SizedBox(height: 30),
-              ChangeNotifierProvider(
-                  create: (_) => LoginFormProvider(), child: _LoginForm())
+              SizedBox(height: 200),
+              CardContainer(
+                  child: Column(
+                children: [
+                  SizedBox(height: 10),
+                  Text('Update your info',
+                      style: Theme.of(context).textTheme.headline4),
+                  SizedBox(height: 30),
+                  ChangeNotifierProvider(
+                      create: (_) => LoginFormProvider(), child: _LoginForm())
+                ],
+              )),
+              SizedBox(height: 50),
             ],
-          )),
-          SizedBox(height: 50),
-        ],
-      ),
-    )));
+          ),
+        )));
   }
 }
 
@@ -52,7 +132,7 @@ class _LoginForm extends StatelessWidget {
               decoration: InputDecorations.authInputDecoration(
                   hintText: 'Name...',
                   labelText: 'Name',
-                  prefixIcon: Icons.text_decrease),
+                  prefixIcon: Icons.abc),
               onChanged: (value) => loginForm.name = value,
             ),
             SizedBox(height: 15),
@@ -92,7 +172,7 @@ class _LoginForm extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10)),
                 disabledColor: Colors.grey,
                 elevation: 0,
-                color: Colors.blue,
+                color: Color.fromARGB(255, 36, 57, 247),
                 child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                     child: Text(
@@ -110,7 +190,6 @@ class _LoginForm extends StatelessWidget {
 
                         loginForm.isLoading = true;
 
-                        // TODO: validar si el login es correcto
                         final String? errorMessage = await userService.update(
                             loginForm.name,
                             loginForm.surname,
@@ -118,14 +197,12 @@ class _LoginForm extends StatelessWidget {
                             loginForm.password);
 
                         if (errorMessage == '500') {
-                          // TODO: mostrar error en pantalla
                           customToast('Username is already in use', context);
-
                           loginForm.isLoading = false;
                         } else {
                           customToast('Server error', context);
                         }
-                      })
+                      }),
           ],
         ),
       ),
@@ -145,7 +222,7 @@ class _LoginForm extends StatelessWidget {
       fullWidth: true,
       toastHorizontalMargin: 25,
       borderRadius: BorderRadius.circular(15),
-      backgroundColor: Colors.blue,
+      backgroundColor: Color.fromARGB(255, 36, 57, 247),
       alignment: Alignment.topCenter,
       position: StyledToastPosition.bottom,
       duration: const Duration(seconds: 3),

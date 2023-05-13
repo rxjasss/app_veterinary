@@ -33,7 +33,7 @@ class LoginScreen extends StatelessWidget {
                   Navigator.pushReplacementNamed(context, 'register'),
               style: ButtonStyle(
                   overlayColor:
-                      MaterialStateProperty.all(Colors.blue.withOpacity(0.1)),
+                      MaterialStateProperty.all(Color.fromARGB(255, 36, 57, 247).withOpacity(0.1)),
                   shape: MaterialStateProperty.all(StadiumBorder())),
               child: Text(
                 'Create new account',
@@ -74,7 +74,7 @@ class _LoginForm extends StatelessWidget {
               decoration: InputDecorations.authInputDecoration(
                 labelText: 'Password',
                 prefixIcon: Icons.lock_outline,
-                hintText: '*****',
+                hintText: '******',
               ),
               onChanged: (value) => loginForm.password = value,
             ),
@@ -84,7 +84,7 @@ class _LoginForm extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10)),
                 disabledColor: Colors.grey,
                 elevation: 0,
-                color: Colors.blue,
+                color: Color.fromARGB(255, 36, 57, 247),
                 child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                     child: Text(

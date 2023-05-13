@@ -72,6 +72,9 @@ class _UserScreenState extends State<UserScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Row(children: [
+          Icon(
+            Icons.pets,
+          ),
           Text(
             'Pets',
           ),
@@ -86,11 +89,11 @@ class _UserScreenState extends State<UserScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.blue.withOpacity(0.1),
+                        color: Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.message, color: Colors.blue),
+                          Icon(Icons.message, color: Color.fromARGB(255, 36, 57, 247)),
                           SizedBox(width: 8),
                           Text('Messages'),
                         ],
@@ -102,11 +105,11 @@ class _UserScreenState extends State<UserScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.blue.withOpacity(0.1),
+                        color: Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.account_box_sharp, color: Colors.blue),
+                          Icon(Icons.account_box_sharp, color: Color.fromARGB(255, 36, 57, 247)),
                           SizedBox(width: 8),
                           Text('User options'),
                         ],
@@ -118,11 +121,11 @@ class _UserScreenState extends State<UserScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.blue.withOpacity(0.1),
+                        color: Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.logout, color: Colors.blue),
+                          Icon(Icons.logout, color: Color.fromARGB(255, 36, 57, 247)),
                           SizedBox(width: 8),
                           Text('Logout'),
                         ],
@@ -134,7 +137,7 @@ class _UserScreenState extends State<UserScreen> {
               },
               onSelected: (value) {
                 if (value == 'Opcion 1') {
-                  // Lógica para la opción 1
+                  Navigator.pushReplacementNamed(context, 'messagesuserscreen');
                 } else if (value == 'Opcion 2') {
                   Navigator.pushReplacementNamed(context, 'updateuserscreen');
                 } else if (value == 'Opcion 3') {
@@ -230,7 +233,7 @@ class _UserScreenState extends State<UserScreen> {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Color.fromARGB(255, 36, 57, 247),
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(

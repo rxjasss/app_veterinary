@@ -31,7 +31,7 @@ class RegisterScreen extends StatelessWidget {
               onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
               style: ButtonStyle(
                   overlayColor:
-                      MaterialStateProperty.all(Colors.blue.withOpacity(0.1)),
+                      MaterialStateProperty.all(Color.fromARGB(255, 36, 57, 247).withOpacity(0.1)),
                   shape: MaterialStateProperty.all(StadiumBorder())),
               child: Text(
                 'Dou you have an account?',
@@ -62,7 +62,7 @@ class _LoginForm extends StatelessWidget {
               decoration: InputDecorations.authInputDecoration(
                   hintText: 'Name...',
                   labelText: 'Name',
-                  prefixIcon: Icons.text_decrease),
+                  prefixIcon: Icons.abc),
               onChanged: (value) => loginForm.name = value,
             ),
             SizedBox(height: 15),
@@ -102,7 +102,7 @@ class _LoginForm extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10)),
                 disabledColor: Colors.grey,
                 elevation: 0,
-                color: Colors.blue,
+                color: Color.fromARGB(255, 36, 57, 247),
                 child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                     child: Text(
