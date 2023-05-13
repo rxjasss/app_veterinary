@@ -15,19 +15,19 @@ class MessagesUserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<MessagesUserScreen> {
-  final petService = PetService();
+  final reportService = ReportService();
   final userService = UserService();
 
-  List<Pet> petUser = [];
-  List<Pet> pets = [];
+  List<Report> reportUser = [];
+  List<Report> reports = [];
   String user = "";
   bool desactivate = true;
 
   Future getPets() async {
-    await petService.getPetsUser(await AuthService().readId());
+    await reportService.getReportsUser(await AuthService().readId());
     setState(() {
-      pets = petService.pets;
-      petUser = pets;
+      reports = reportService.reports;
+      reportUser = reports;
     });
   }
 
@@ -46,13 +46,14 @@ class _UserScreenState extends State<MessagesUserScreen> {
   }
 
   void _runFilter(String enteredKeyword) {
-    List<Pet> results = [];
+    List<Report> results = [];
     if (enteredKeyword.isEmpty) {
-      results = pets;
+      results = reports;
     } else {
-      results = pets
-          .where((x) =>
-              x.name!.toLowerCase().contains(enteredKeyword.toLowerCase()))
+      results = reports
+          .where((x) => x.description!
+              .toLowerCase()
+              .contains(enteredKeyword.toLowerCase()))
           .toList();
     }
     setState(() {});
@@ -152,7 +153,7 @@ class _UserScreenState extends State<MessagesUserScreen> {
         ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
         centerTitle: true,
       ),
-      body: petService.isLoading
+      body: reportService.isLoading
           ? const Center(
               child: CircularProgressIndicator(),
             )
@@ -174,11 +175,14 @@ class _UserScreenState extends State<MessagesUserScreen> {
   }
 
   Widget buildListView(BuildContext context) {
+    List<Report> reversedList =
+        List.from(reportUser.reversed); // Invertir el orden de la lista
+
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.all(30),
-      itemCount: petUser.length,
+      itemCount: reversedList.length,
       itemBuilder: (BuildContext context, index) {
         return SizedBox(
           height: 250,
@@ -197,7 +201,7 @@ class _UserScreenState extends State<MessagesUserScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${petUser[index].name != null ? petUser[index].name![0].toUpperCase() + petUser[index].name!.substring(1) : ''}',
+                        '${reversedList[index].idVeterinary}',
                         style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.start,
@@ -206,7 +210,7 @@ class _UserScreenState extends State<MessagesUserScreen> {
                   ),
                   Divider(color: Colors.black),
                   Text(
-                    '${petUser[index].animal != null ? petUser[index].animal![0].toUpperCase() + petUser[index].animal!.substring(1) : ''}',
+                    '${reversedList[index].description != null ? reversedList[index].description![0].toUpperCase() + reversedList[index].description!.substring(1) : ''}',
                     style: const TextStyle(fontSize: 16),
                   ),
                   Divider(color: Colors.black),
