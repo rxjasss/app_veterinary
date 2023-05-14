@@ -54,7 +54,7 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-//LOGINS
+//LOGIN
   Future<String?> login(String user, String password) async {
     final Map<String, dynamic> authData = {'user': user, 'password': password};
     usernameGlobal = user;

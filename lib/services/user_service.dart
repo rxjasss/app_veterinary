@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:app_veterinary/Models/models.dart';
 
 class UserService extends ChangeNotifier {
-  final String _baseUrl = 'semillero.allsites.es';
+  final String _baseUrl = '192.168.2.10:8080';
   bool isLoading = true;
   
   String usuario = "";
@@ -34,77 +34,24 @@ class UserService extends ChangeNotifier {
     );
     final Map<String, dynamic> decodedResp = json.decode(resp.body);
     await storage.write(
-        key: 'company_id', value: decodedResp['data']['company_id'].toString());
+        key: 'id', value: decodedResp['data']['id'].toString());
     isLoading = false;
     notifyListeners();
-    return decodedResp['data']['company_id'].toString();
-  }
-
-  // ignore: non_constant_identifier_names
-  readCompany_id() async {
-    return await storage.read(key: 'company_id') ?? '';
-  }
-
-  Future postActivate(String id) async {
-    final url = Uri.http(_baseUrl, '/public/api/activate', {'user_id': id});
-    String? token = await AuthService().readToken();
-    isLoading = true;
-    notifyListeners();
-    // ignore: unused_local_variable
-    final resp = await http.post(
-      url,
-      headers: {
-        'Content-type': 'application/json',
-        'Accept': 'application/json',
-        "Authorization": "Bearer $token"
-      },
-    );
-  }
-
-  Future postDeactivate(String id) async {
-    final url = Uri.http(_baseUrl, '/public/api/deactivate', {'user_id': id});
-    String? token = await AuthService().readToken();
-    isLoading = true;
-    notifyListeners();
-    // ignore: unused_local_variable
-    final resp = await http.post(
-      url,
-      headers: {
-        'Content-type': 'application/json',
-        'Accept': 'application/json',
-        "Authorization": "Bearer $token"
-      },
-    );
-  }
-
-  Future postDelete(String id) async {
-    final url = Uri.http(_baseUrl, '/public/api/delete', {'user_id': id});
-    String? token = await AuthService().readToken();
-    isLoading = true;
-    notifyListeners();
-    // ignore: unused_local_variable
-    final resp = await http.post(
-      url,
-      headers: {
-        'Content-type': 'application/json',
-        'Accept': 'application/json',
-        "Authorization": "Bearer $token"
-      },
-    );
+    return decodedResp['data']['id'].toString();
   }
 
   Future<String?> update(
-    String username,
-    String password,
     String name,
     String surname,
+    String username,
+    String password,
   ) async {
     String id = await AuthService().readId();
     final Map<String, dynamic> authData = {
       'id': id,
-      'username': username,
       'name': name,
       'surname': surname,
+      'username': username,
       'password': password,
     };
 

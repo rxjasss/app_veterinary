@@ -30,11 +30,13 @@ class UpdateUserScreen extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
+                        color:
+                            Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.message, color: Color.fromARGB(255, 36, 57, 247)),
+                          Icon(Icons.message,
+                              color: Color.fromARGB(255, 36, 57, 247)),
                           SizedBox(width: 8),
                           Text('Messages'),
                         ],
@@ -46,11 +48,13 @@ class UpdateUserScreen extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
+                        color:
+                            Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.pets, color: Color.fromARGB(255, 36, 57, 247)),
+                          Icon(Icons.pets,
+                              color: Color.fromARGB(255, 36, 57, 247)),
                           SizedBox(width: 8),
                           Text('Pets'),
                         ],
@@ -62,11 +66,13 @@ class UpdateUserScreen extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
+                        color:
+                            Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.logout, color: Color.fromARGB(255, 36, 57, 247)),
+                          Icon(Icons.logout,
+                              color: Color.fromARGB(255, 36, 57, 247)),
                           SizedBox(width: 8),
                           Text('Logout'),
                         ],
@@ -183,24 +189,35 @@ class _LoginForm extends StatelessWidget {
                     ? null
                     : () async {
                         FocusScope.of(context).unfocus();
-                        final authService =
-                            Provider.of<AuthService>(context, listen: false);
-
-                        if (!loginForm.isValidForm()) return;
-
-                        loginForm.isLoading = true;
-
-                        final String? errorMessage = await userService.update(
-                            loginForm.name,
-                            loginForm.surname,
-                            loginForm.username,
-                            loginForm.password);
-
-                        if (errorMessage == '500') {
-                          customToast('Username is already in use', context);
-                          loginForm.isLoading = false;
+                        if (loginForm.username.isEmpty ||
+                            loginForm.password.isEmpty ||
+                            loginForm.name.isEmpty ||
+                            loginForm.surname.isEmpty) {
+                          customToast("Fields can't be empty", context);
                         } else {
-                          customToast('Server error', context);
+                          final authService =
+                              Provider.of<AuthService>(context, listen: false);
+
+                          if (!loginForm.isValidForm()) return;
+
+                          loginForm.isLoading = true;
+
+                          final String? errorMessage = await userService.update(
+                              loginForm.name,
+                              loginForm.surname,
+                              loginForm.username,
+                              loginForm.password);
+
+                          if (errorMessage == '201') {
+                            customToast('Info updated', context);
+                            Navigator.pushReplacementNamed(
+                                context, 'userscreen');
+                          } else if (errorMessage == '500') {
+                            customToast('Username is already in use', context);
+                            loginForm.isLoading = false;
+                          } else {
+                            customToast('Server error', context);
+                          }
                         }
                       }),
           ],

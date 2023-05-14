@@ -10,6 +10,7 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         body: AuthBackground(
             child: SingleChildScrollView(
       child: Column(
@@ -30,8 +31,8 @@ class RegisterScreen extends StatelessWidget {
           TextButton(
               onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
               style: ButtonStyle(
-                  overlayColor:
-                      MaterialStateProperty.all(Color.fromARGB(255, 36, 57, 247).withOpacity(0.1)),
+                  overlayColor: MaterialStateProperty.all(
+                      Color.fromARGB(255, 36, 57, 247).withOpacity(0.1)),
                   shape: MaterialStateProperty.all(StadiumBorder())),
               child: Text(
                 'Dou you have an account?',
@@ -113,30 +114,38 @@ class _LoginForm extends StatelessWidget {
                     ? null
                     : () async {
                         FocusScope.of(context).unfocus();
-                        final authService =
-                            Provider.of<AuthService>(context, listen: false);
-
-                        if (!loginForm.isValidForm()) return;
-
-                        loginForm.isLoading = true;
-
-                        // TODO: validar si el login es correcto
-                        final String? errorMessage = await authService.register(
-                            loginForm.name,
-                            loginForm.surname,
-                            loginForm.username,
-                            loginForm.password);
-
-                        if (errorMessage == '200') {
-                          customToast('Registered', context);
-                          Navigator.pushReplacementNamed(context, 'login');
-                        } else if (errorMessage == '500') {
-                          // TODO: mostrar error en pantalla
-                          customToast('Username is already in use', context);
-
-                          loginForm.isLoading = false;
+                        if (loginForm.username.isEmpty ||
+                            loginForm.password.isEmpty ||
+                            loginForm.name.isEmpty ||
+                            loginForm.surname.isEmpty) {
+                          customToast("Fields can't be empty", context);
                         } else {
-                          customToast('Server error', context);
+                          final authService =
+                              Provider.of<AuthService>(context, listen: false);
+
+                          if (!loginForm.isValidForm()) return;
+
+                          loginForm.isLoading = true;
+
+                          // TODO: validar si el login es correcto
+                          final String? errorMessage =
+                              await authService.register(
+                                  loginForm.name,
+                                  loginForm.surname,
+                                  loginForm.username,
+                                  loginForm.password);
+
+                          if (errorMessage == '200') {
+                            customToast('Registered', context);
+                            Navigator.pushReplacementNamed(context, 'login');
+                          } else if (errorMessage == '500') {
+                            // TODO: mostrar error en pantalla
+                            customToast('Username is already in use', context);
+
+                            loginForm.isLoading = false;
+                          } else {
+                            customToast('Server error', context);
+                          }
                         }
                       })
           ],
