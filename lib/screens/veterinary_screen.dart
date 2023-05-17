@@ -249,22 +249,23 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: Text("Delete appointment"),
-                          content: Text(
-                              "Are you sure?"),
+                          content: Text("Are you sure?"),
                           actions: [
                             TextButton(
                               child: Text("Cancel"),
                               onPressed: () {
-                                Navigator.of(context)
-                                    .pop(); 
+                                Navigator.of(context).pop();
                               },
                             ),
                             TextButton(
                               child: Text("Delete"),
-                              onPressed: () {
-                                // Acción a realizar cuando se confirme la eliminación de la cita
-                                Navigator.of(context)
-                                    .pop(); 
+                              onPressed: () async {
+                                await appointmentService.deleteAppointment(
+                                    appointmentVeterinary[index].id!);
+                                Navigator.of(context).pop();
+                                setState(() {
+                                  appointmentVeterinary.removeAt(index);
+                                });
                               },
                             ),
                           ],

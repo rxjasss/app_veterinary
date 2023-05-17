@@ -47,4 +47,22 @@ class AppointmentService extends ChangeNotifier {
     return appointmentList;
   }
 
+
+  //DELETE APPOINTEMENT
+  deleteAppointment(int id) async {
+    String? token = await AuthService().readToken();
+
+    isLoading = true;
+    notifyListeners();
+
+    final url = Uri.http(_baseUrl, '/api/all/appointment/$id');
+
+    final resp = await http.delete(
+      url,
+      headers: {"Authorization": "Bearer $token"},
+    );
+    isLoading = false;
+    notifyListeners();
+    if (resp.statusCode == 200) {}
+  }
 }
