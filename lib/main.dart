@@ -1,6 +1,7 @@
 import 'package:app_veterinary/providers/providers.dart';
 import 'package:app_veterinary/screens/messages_user_screen.dart';
 import 'package:app_veterinary/screens/update_user_screen.dart';
+import 'package:app_veterinary/screens/veterinary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
           'login': (_) =>  LoginScreen(),
           'register': (_) =>  RegisterScreen(),
           'userscreen': (_) =>  UserScreen(),
-          //'veterinaryscreen': (_) =>  VeterinaryScreen(),
+          'veterinaryscreen': (_) =>  VeterinaryScreen(),
           'updateuserscreen': (_) => UpdateUserScreen(),
           'messagesuserscreen': (_) => MessagesUserScreen(),
         },

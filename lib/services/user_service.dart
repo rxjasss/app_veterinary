@@ -21,7 +21,7 @@ class UserService extends ChangeNotifier {
     String? token = await AuthService().readToken();
     String? id = await AuthService().readId();
 
-    final url = Uri.http(_baseUrl, '/public/api/user/$id');
+    final url = Uri.http(_baseUrl, '/all/$id');
     isLoading = true;
     notifyListeners();
     final resp = await http.get(
@@ -33,11 +33,31 @@ class UserService extends ChangeNotifier {
       },
     );
     final Map<String, dynamic> decodedResp = json.decode(resp.body);
-    await storage.write(
-        key: 'id', value: decodedResp['data']['id'].toString());
+    print(decodedResp);
+    await storage.write(key: 'id', value: decodedResp['id'].toString());
     isLoading = false;
     notifyListeners();
-    return decodedResp['data']['id'].toString();
+
+    String idUser = decodedResp['id'].toString();
+    String usernameUser = decodedResp['username'].toString();
+    String passwordUser = decodedResp['password'].toString();
+    String nameUser = decodedResp['name'].toString();
+    String surnameUser = decodedResp['surname'].toString();
+    String enabledUser = decodedResp['surname'].toString();
+    String roleUser = decodedResp['surname'].toString();
+    String tokenUser = decodedResp['surname'].toString();
+
+    User us = User(
+        id: int.parse(idUser),
+        username: usernameUser,
+        password: passwordUser,
+        name: nameUser,
+        surname: surnameUser,
+        enabled: bool.hasEnvironment(enabledUser),
+        role: roleUser,
+        token: tokenUser);
+
+    return us;
   }
 
   Future<String?> update(

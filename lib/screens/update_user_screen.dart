@@ -1,3 +1,4 @@
+import 'package:app_veterinary/Models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:provider/provider.dart';
@@ -118,8 +119,30 @@ class UpdateUserScreen extends StatelessWidget {
         )));
   }
 }
+class _LoginForm extends StatefulWidget {
+  const _LoginForm({Key? key}) : super(key: key);
 
-class _LoginForm extends StatelessWidget {
+  @override
+  State<_LoginForm> createState() => __LoginForm();
+}
+
+class __LoginForm extends State<_LoginForm> {
+  final userService = UserService();
+  User user = User();
+
+  Future getUser() async {
+    await userService.getUser();
+    User us = await userService.getUser();
+    setState(() {
+      user = us;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
   @override
   Widget build(BuildContext context) {
     final loginForm = Provider.of<LoginFormProvider>(context);
@@ -134,6 +157,7 @@ class _LoginForm extends StatelessWidget {
             SizedBox(height: 15),
             TextFormField(
               autocorrect: false,
+              initialValue: user.name,
               keyboardType: TextInputType.text,
               decoration: InputDecorations.authInputDecoration(
                   hintText: 'Name...',
@@ -144,6 +168,7 @@ class _LoginForm extends StatelessWidget {
             SizedBox(height: 15),
             TextFormField(
               autocorrect: false,
+              initialValue: user.surname,
               keyboardType: TextInputType.text,
               decoration: InputDecorations.authInputDecoration(
                   hintText: 'Surname...',
@@ -154,6 +179,7 @@ class _LoginForm extends StatelessWidget {
             SizedBox(height: 15),
             TextFormField(
               autocorrect: false,
+              initialValue: user.username,
               keyboardType: TextInputType.text,
               decoration: InputDecorations.authInputDecoration(
                   hintText: 'Username...',
