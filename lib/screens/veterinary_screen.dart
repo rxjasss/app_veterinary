@@ -142,7 +142,7 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
             onSelected: (value) {
               if (value == 'Opcion 1') {
                 Navigator.pushReplacementNamed(
-                    context, 'messagesveterinarycreen');
+                    context, 'messagesveterinaryscreen');
               } else if (value == 'Opcion 2') {
                 Navigator.pushReplacementNamed(context, 'updateuserscreen');
               } else if (value == 'Opcion 3') {

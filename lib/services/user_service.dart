@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:app_veterinary/Models/models.dart';
 
 class UserService extends ChangeNotifier {
-  final String _baseUrl = '192.168.2.10:8080';
+  final String _baseUrl = '192.168.2.9:8080';
   bool isLoading = true;
   
   String usuario = "";

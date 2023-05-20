@@ -1,5 +1,6 @@
 import 'package:app_veterinary/providers/providers.dart';
 import 'package:app_veterinary/screens/messages_user_screen.dart';
+import 'package:app_veterinary/screens/messages_veterinary_screen.dart';
 import 'package:app_veterinary/screens/update_user_screen.dart';
 import 'package:app_veterinary/screens/veterinary_screen.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
           'veterinaryscreen': (_) =>  VeterinaryScreen(),
           'updateuserscreen': (_) => UpdateUserScreen(),
           'messagesuserscreen': (_) => MessagesUserScreen(),
+          'messagesveterinaryscreen': (_) => MessagesVeterinaryScreen(),
         },
         scaffoldMessengerKey: NotificationsService.messengerKey,
         theme: ThemeData.light().copyWith(
