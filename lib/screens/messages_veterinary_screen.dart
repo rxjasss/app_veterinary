@@ -20,10 +20,10 @@ class _UserScreenState extends State<MessagesVeterinaryScreen> {
 
   List<Report> reportVeterinary = [];
   List<Report> reports = [];
-  String veterinary = "";
+  int veterinary = 0;
   bool desactivate = true;
 
-  Future getPets() async {
+  Future getReports() async {
     await reportService.getReportsVeterinary(await AuthService().readId());
     setState(() {
       reports = reportService.reports;
@@ -31,18 +31,19 @@ class _UserScreenState extends State<MessagesVeterinaryScreen> {
     });
   }
 
-  Future getUser() async {
+  Future getUserId() async {
     await userService.getUser();
-    String id = await userService.getUser() as String;
+    String id = await AuthService().readId();
     setState(() {
-      veterinary = id;
+      veterinary = int.parse(id);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    getPets();
+    getReports();
+    getUserId();
   }
 
   void _runFilter(String enteredKeyword) {
@@ -173,7 +174,7 @@ class _UserScreenState extends State<MessagesVeterinaryScreen> {
             ),
       floatingActionButton: RawMaterialButton(
         onPressed: () {
-          Navigator.pushReplacementNamed(context, 'newmessagescreen');
+          Navigator.pushReplacementNamed(context, 'newmessagescreen',arguments:veterinary);
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),

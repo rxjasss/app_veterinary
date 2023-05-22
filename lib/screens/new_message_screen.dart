@@ -1,3 +1,5 @@
+import 'package:app_veterinary/Models/models.dart';
+import 'package:app_veterinary/widgets/background.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +8,19 @@ import '../services/services.dart';
 import '../ui/input_decorations.dart';
 import '../widgets/widgets.dart';
 
-class NewMessageScreen extends StatelessWidget {
+class NewMessageScreen extends StatefulWidget {
+  final int idVeterinary;
+  const NewMessageScreen({required this.idVeterinary});
+
+  @override
+  State<NewMessageScreen> createState() =>
+      _NewReportScreen(idVeterinary: idVeterinary);
+}
+
+class _NewReportScreen extends State<NewMessageScreen> {
+  final int idVeterinary;
+
+  _NewReportScreen({required this.idVeterinary});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,11 +107,11 @@ class NewMessageScreen extends StatelessWidget {
         ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
         centerTitle: true,
       ),
-        body: AuthBackground(
+        body: Background(
             child: SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(height: 200),
+          SizedBox(height: 150),
           CardContainer(
               child: Column(
             children: [
@@ -106,7 +120,7 @@ class NewMessageScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline4),
               SizedBox(height: 30),
               ChangeNotifierProvider(
-                  create: (_) => LoginFormProvider(), child: _LoginForm())
+                  create: (_) => LoginFormProvider(), child: _MessageForm(idVeterinary: idVeterinary))
             ],
           )),
           SizedBox(height: 50),
@@ -126,89 +140,135 @@ class NewMessageScreen extends StatelessWidget {
     )));
   }
 }
+class _MessageForm extends StatefulWidget {
+  final int idVeterinary;
+  const _MessageForm({required this.idVeterinary});
 
-class _LoginForm extends StatelessWidget {
+  @override
+  State<_MessageForm> createState() => __Form(idVeterinary: idVeterinary);
+}
+
+class __Form extends State<_MessageForm> {
+  final int idVeterinary;
+  __Form({required this.idVeterinary});
+
+  final userService = UserService();
+  User user = User();
+  List<User> users = [];
+
+
+  Future getUsers() async {
+    await userService.getListUsers();
+    setState(() {
+      users = userService.users;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUsers();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final loginForm = Provider.of<LoginFormProvider>(context);
+    final reportForm = Provider.of<ReportProvider>(context);
+    final reportService = ReportService();
+    
+    List<User> options = [];
+    if (users.isNotEmpty) {
+      for (var i = 0; i < users.length; i++) {
+        options.add(users[i]);
+      }
+    }
 
     return Container(
       child: Form(
-        key: loginForm.formKey,
+        key: reportForm.formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           children: [
-            SizedBox(height: 15),
-            TextFormField(
-              autocorrect: false,
-              keyboardType: TextInputType.text,
+            DropdownButtonFormField<dynamic>(
               decoration: InputDecorations.authInputDecoration(
-                  hintText: 'Name...',
-                  labelText: 'Name',
-                  prefixIcon: Icons.abc),
-              onChanged: (value) => loginForm.name = value,
+                  prefixIcon: Icons.person,
+                  hintText: '',
+                  labelText: 'User'),
+              // value: selectedItem,
+              items: options
+                  .map(
+                    (op) => DropdownMenuItem(
+                      value: op,
+                      child: Text(op.username.toString()),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                reportForm.idUser = (value.id);
+              },
+              validator: (cicle) {
+                if (cicle != null) {
+                  return null;
+                } else {
+                  return 'Select an user';
+                }
+              },
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 30),
             TextFormField(
               autocorrect: false,
-              keyboardType: TextInputType.text,
+              maxLength: 25,
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecorations.authInputDecoration(
-                  hintText: 'Description...',
-                  labelText: 'Description',
+                  hintText: 'Message...',
+                  labelText: 'Message',
                   prefixIcon: Icons.message),
-              onChanged: (value) => loginForm.surname = value,
+              onChanged: (value) => reportForm.description = value,
+              maxLines: null,
             ),
-            SizedBox(height: 15),
-    
+            SizedBox(height: 30),
             MaterialButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 disabledColor: Colors.grey,
                 elevation: 0,
-                color: Color.fromARGB(255, 36, 57, 247),
+                color: Colors.blueGrey,
                 child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                     child: Text(
-                      loginForm.isLoading ? 'Wait' : 'Send',
+                      reportForm.isLoading ? 'Wait' : 'Send',
                       style: TextStyle(color: Colors.white),
                     )),
-                onPressed: loginForm.isLoading
+                onPressed: reportForm.isLoading
                     ? null
                     : () async {
+
                         FocusScope.of(context).unfocus();
-                        if (loginForm.username.isEmpty ||
-                            loginForm.password.isEmpty ||
-                            loginForm.name.isEmpty ||
-                            loginForm.surname.isEmpty) {
-                          customToast("Fields can't be empty", context);
+                        final authService =
+                            Provider.of<AuthService>(context, listen: false);
+
+                        if (!reportForm.isValidForm()) return;
+
+                        reportForm.isLoading = true;
+                        int idUser = reportForm.idUser;
+                        // TODO: validar si el login es correcto
+                        final String? errorMessage = await reportService.create(
+                            reportForm.description,
+                            idVeterinary,
+                            reportForm.idUser);
+
+                        if (errorMessage == '201') {
+                          customToast('Sent', context);
+                          Navigator.pushReplacementNamed(
+                              context, 'messagesveterinaryscreen');
+                        } else if (errorMessage == '500') {
+                          // TODO: mostrar error en pantalla
+                          customToast('Error sending message', context);
+
+                          reportForm.isLoading = false;
                         } else {
-                          final authService =
-                              Provider.of<AuthService>(context, listen: false);
-
-                          if (!loginForm.isValidForm()) return;
-
-                          loginForm.isLoading = true;
-
-                          // TODO: validar si el login es correcto
-                          final String? errorMessage =
-                              await authService.register(
-                                  loginForm.name,
-                                  loginForm.surname,
-                                  loginForm.username,
-                                  loginForm.password);
-
-                          if (errorMessage == '200') {
-                            customToast('Registered', context);
-                            Navigator.pushReplacementNamed(context, 'login');
-                          } else if (errorMessage == '500') {
-                            // TODO: mostrar error en pantalla
-                            customToast('Username is already in use', context);
-
-                            loginForm.isLoading = false;
-                          } else {
-                            customToast('Server error', context);
-                          }
+                          customToast('Server error', context);
                         }
+                        // }
                       })
           ],
         ),
@@ -238,3 +298,6 @@ class _LoginForm extends StatelessWidget {
     );
   }
 }
+
+
+

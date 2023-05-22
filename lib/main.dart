@@ -1,3 +1,5 @@
+import 'package:app_veterinary/Models/report.dart';
+import 'package:app_veterinary/providers/providers.dart';
 import 'package:app_veterinary/screens/messages_veterinary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +29,16 @@ class AppState extends StatelessWidget {
           create: (_) => VerifyService(),
           lazy: false,
         ),
+
+        ChangeNotifierProvider(
+          create: (_) => ReportService(),
+          lazy: false,
+        ),
+
+        ChangeNotifierProvider(
+          create: (_) => ReportProvider(),
+          lazy: false,
+        ),
       ],
       child: MyApp(),
     );
@@ -50,6 +62,15 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'app_veterinary',
         initialRoute: 'login',
+        onGenerateRoute: (settings) {
+          if (settings.name == 'newmessagescreen') {
+            final int id = settings.arguments as int;
+            return MaterialPageRoute(
+              builder: (context) => NewMessageScreen(idVeterinary: id),
+            );
+          }
+          return null;
+        },
         routes: {
           'home': (_) => const HomeScreen(),
           'login': (_) =>  LoginScreen(),
@@ -59,7 +80,6 @@ class MyApp extends StatelessWidget {
           'updateuserscreen': (_) => UpdateUserScreen(),
           'messagesuserscreen': (_) => MessagesUserScreen(),
           'messagesveterinaryscreen': (_) => MessagesVeterinaryScreen(),
-          'newmessagescreen': (_) => NewMessageScreen(),
         },
         scaffoldMessengerKey: NotificationsService.messengerKey,
         theme: ThemeData.light().copyWith(

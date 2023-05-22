@@ -10,10 +10,12 @@ import 'package:http/http.dart' as http;
 import 'package:app_veterinary/Models/models.dart';
 
 class UserService extends ChangeNotifier {
-  final String _baseUrl = '192.168.2.9:8080';
+  final String _baseUrl = '192.168.2.7:8080';
   bool isLoading = true;
   
   String usuario = "";
+  List<User> users = [];
+  List<User> veterinarys = [];
   final storage = const FlutterSecureStorage();
 
 
@@ -33,7 +35,6 @@ class UserService extends ChangeNotifier {
       },
     );
     final Map<String, dynamic> decodedResp = json.decode(resp.body);
-    print(decodedResp);
     await storage.write(key: 'id', value: decodedResp['id'].toString());
     isLoading = false;
     notifyListeners();
@@ -58,6 +59,64 @@ class UserService extends ChangeNotifier {
         token: tokenUser);
 
     return us;
+  }
+
+  Future<List> getListUsers() async {
+    users.clear();
+    isLoading = true;
+    notifyListeners();
+    final url = Uri.http(_baseUrl, '/all/users');
+    String? token = await AuthService().readToken();
+
+    final resp = await http.get(
+      url,
+      headers: {"Authorization": "Bearer $token"},
+    );
+    final List<dynamic> decodedResp = json.decode(resp.body);
+    List<User> userList = decodedResp
+        .map((u) => User(
+              id: u['id'],
+              name: u['name'],
+              surname: u['surname'],
+              username: u['username'],
+              password: u['password'],
+            ))
+        .toList();
+    users = userList;
+
+    isLoading = false;
+    notifyListeners();
+
+    return userList;
+  }
+
+  Future<List> getListVeterinarys() async {
+    veterinarys.clear();
+    isLoading = true;
+    notifyListeners();
+    final url = Uri.http(_baseUrl, '/api/all/veterinarys');
+    String? token = await AuthService().readToken();
+
+    final resp = await http.get(
+      url,
+      headers: {"Authorization": "Bearer $token"},
+    );
+    final List<dynamic> decodedResp = json.decode(resp.body);
+    List<User> veterinarysList = decodedResp
+        .map((u) => User(
+              id: u['id'],
+              name: u['name'],
+              surname: u['surname'],
+              username: u['username'],
+              password: u['password'],
+            ))
+        .toList();
+    users = veterinarysList;
+
+    isLoading = false;
+    notifyListeners();
+
+    return veterinarysList;
   }
 
   Future<String?> update(
@@ -95,6 +154,8 @@ class UserService extends ChangeNotifier {
       return (resp.statusCode.toString());
     }
   }
+
+
 }
 
 
