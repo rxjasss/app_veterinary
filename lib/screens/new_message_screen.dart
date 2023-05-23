@@ -68,7 +68,7 @@ class _NewReportScreen extends State<NewMessageScreen> {
                         Icon(Icons.pets,
                             color: Color.fromARGB(255, 36, 57, 247)),
                         SizedBox(width: 8),
-                        Text('Create pets'),
+                        Text('Pets'),
                       ],
                     ),
                   ),

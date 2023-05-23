@@ -39,6 +39,16 @@ class AppState extends StatelessWidget {
           create: (_) => ReportProvider(),
           lazy: false,
         ),
+
+        ChangeNotifierProvider(
+          create: (_) => PetService(),
+          lazy: false,
+        ),
+
+        ChangeNotifierProvider(
+          create: (_) => PetProvider(),
+          lazy: false,
+        ),
       ],
       child: MyApp(),
     );

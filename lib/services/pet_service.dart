@@ -18,7 +18,7 @@ class PetService extends ChangeNotifier {
     pets.clear();
     isLoading = true;
     notifyListeners();
-    final url = Uri.http(_baseUrl, '/api/all/pets');
+    final url = Uri.http(_baseUrl, '/api/veterinary/pets');
     String? token = await AuthService().readToken();
 
     final resp = await http.get(
@@ -110,22 +110,24 @@ class PetService extends ChangeNotifier {
 
 // CREATE PET
   Future create(
+    int age,
+    String animal,
+    String breed,
     String name,
-    String description,
-    String price,
-    int idCategory,
+    int idUser,
   ) async {
     String? token = await AuthService().readToken();
     isLoading = false;
     notifyListeners();
-    final Map<String, dynamic> productData = {
+    final Map<String, dynamic> petData = {
+      'age': age,
+      'animal': animal,
+      'breed': breed,
       'name': name,
-      'description': description,
-      'price': price,
-      'idCategory': idCategory,
+      'idUser': idUser,
     };
 
-    final url = Uri.http(_baseUrl, '/api/admin/categories/$idCategory/product');
+    final url = Uri.http(_baseUrl, '/api/veterinary/pet');
 
     final resp = await http.post(
       url,
@@ -133,22 +135,23 @@ class PetService extends ChangeNotifier {
         "content-type": "application/json",
         "Authorization": "Bearer $token"
       },
-      body: json.encode(productData),
+      body: json.encode(petData),
     );
     isLoading = false;
     notifyListeners();
 
     if (resp.statusCode == 200) {}
+    return resp.statusCode.toString();
   }
 
   //  DELETE PET
-  deleteProduct(String id) async {
+  deletePet(int id) async {
     String? token = await AuthService().readToken();
 
     isLoading = true;
     notifyListeners();
 
-    final url = Uri.http(_baseUrl, '/api/admin/products/$id');
+    final url = Uri.http(_baseUrl, '/api/veterinary/pet/$id');
 
     final resp = await http.delete(
       url,
@@ -158,6 +161,5 @@ class PetService extends ChangeNotifier {
     notifyListeners();
     if (resp.statusCode == 200) {}
   }
-
-  // EDIT PET
+  
 }
