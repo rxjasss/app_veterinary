@@ -171,6 +171,22 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   Widget buildListView(BuildContext context) {
+    if (pets.isEmpty) {
+    return Center(
+      child: Container(
+        padding: EdgeInsets.only(top: 250), 
+        child: Text(
+          'Here is nothing to see yet...',
+          style: TextStyle(
+            fontSize: 20,
+            color: Color.fromARGB(255, 151, 144, 144),
+            fontStyle: FontStyle.italic,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  } else {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -248,6 +264,7 @@ class _UserScreenState extends State<UserScreen> {
         );
       },
     );
+  }
   }
 
   void customToast(String s, BuildContext context) {

@@ -175,55 +175,72 @@ class _UserScreenState extends State<MessagesUserScreen> {
   }
 
   Widget buildListView(BuildContext context) {
-    List<Report> reversedList =
-        List.from(reportUser.reversed); // Invertir el orden de la lista
-
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(30),
-      itemCount: reversedList.length,
-      itemBuilder: (BuildContext context, index) {
-        return SizedBox(
-          height: 250,
-          child: Card(
-            elevation: 10,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
+    List<Report> reversedList = List.from(reportUser.reversed);
+    if (reversedList.isEmpty) {
+      return Center(
+        child: Container(
+          padding: EdgeInsets.only(top: 250),
+          child: Text(
+            'Here is nothing to see yet...',
+            style: TextStyle(
+              fontSize: 20,
+              color: Color.fromARGB(255, 151, 144, 144),
+              fontStyle: FontStyle.italic,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '${reversedList[index].idVeterinary}',
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.start,
-                      ),
-                    ],
-                  ),
-                  Divider(color: Colors.black),
-                  Text(
-                    '${reversedList[index].description != null ? reversedList[index].description![0].toUpperCase() + reversedList[index].description!.substring(1) : ''}',
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  Divider(color: Colors.black),
-                ],
+            textAlign: TextAlign.center,
+          ),
+        ),
+      );
+    } else {
+      // Invertir el orden de la lista
+
+      return ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(30),
+        itemCount: reversedList.length,
+        itemBuilder: (BuildContext context, index) {
+          return SizedBox(
+            height: 250,
+            child: Card(
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${reversedList[index].idVeterinary}',
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
+                    ),
+                    Divider(color: Colors.black),
+                    Text(
+                      '${reversedList[index].description != null ? reversedList[index].description![0].toUpperCase() + reversedList[index].description!.substring(1) : ''}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    Divider(color: Colors.black),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return const Divider();
-      },
-    );
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const Divider();
+        },
+      );
+    }
   }
 }
 
