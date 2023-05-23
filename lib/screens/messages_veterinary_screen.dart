@@ -144,7 +144,7 @@ class _UserScreenState extends State<MessagesVeterinaryScreen> {
               if (value == 'Opcion 1') {
                 Navigator.pushReplacementNamed(context, 'veterinaryscreen');
               } else if (value == 'Opcion 2') {
-                Navigator.pushReplacementNamed(context, 'updateuserscreen');
+                Navigator.pushReplacementNamed(context, 'petscreen');
               } else if (value == 'Opcion 3') {
                 Provider.of<AuthService>(context, listen: false).logout();
                 Navigator.pushReplacementNamed(context, 'login');
@@ -192,7 +192,22 @@ class _UserScreenState extends State<MessagesVeterinaryScreen> {
   Widget buildListView(BuildContext context) {
     List<Report> reversedList =
         List.from(reportVeterinary.reversed); // Invertir el orden de la lista
-
+    if (reversedList.isEmpty) {
+    return Center(
+      child: Container(
+        padding: EdgeInsets.only(top: 250), 
+        child: Text(
+          'Here is nothing to see yet...',
+          style: TextStyle(
+            fontSize: 20,
+            color: Color.fromARGB(255, 151, 144, 144),
+            fontStyle: FontStyle.italic,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  } else {
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -240,6 +255,7 @@ class _UserScreenState extends State<MessagesVeterinaryScreen> {
       },
     );
   }
+}
 }
 
 void customToast(String s, BuildContext context) {

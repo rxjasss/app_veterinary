@@ -7,28 +7,26 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
-class VeterinaryScreen extends StatefulWidget {
-  const VeterinaryScreen({Key? key}) : super(key: key);
+class PetScreen extends StatefulWidget {
+  const PetScreen({Key? key}) : super(key: key);
 
   @override
-  State<VeterinaryScreen> createState() => _VeterinaryScreenState();
+  State<PetScreen> createState() => _PetScreenState();
 }
 
-class _VeterinaryScreenState extends State<VeterinaryScreen> {
-  final appointmentService = AppointmentService();
+class _PetScreenState extends State<PetScreen> {
+  final petService = PetService();
   final userService = UserService();
 
-  List<Appointment> appointmentVeterinary = [];
-  List<Appointment> appointments = [];
+  List<Pet> pets = [];
   String user = "";
   bool desactivate = true;
 
   Future getPets() async {
-    await appointmentService
-        .getAppointmentsVeterinary(await AuthService().readId());
+    await petService
+        .getListPets();
     setState(() {
-      appointments = appointmentService.appointments;
-      appointmentVeterinary = appointments;
+      pets = petService.pets;
     });
   }
 
@@ -47,13 +45,13 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
   }
 
   void _runFilter(String enteredKeyword) {
-    List<Appointment> results = [];
+    List<Pet> results = [];
     if (enteredKeyword.isEmpty) {
-      results = appointments;
+      results = pets;
     } else {
-      results = appointments
+      results = pets
           .where((x) =>
-              x.hour!.toLowerCase().contains(enteredKeyword.toLowerCase()))
+              x.name!.toLowerCase().contains(enteredKeyword.toLowerCase()))
           .toList();
     }
     setState(() {});
@@ -74,10 +72,10 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
       appBar: AppBar(
         title: Row(children: [
           Icon(
-            Icons.perm_device_information_rounded,
+            Icons.pets,
           ),
           Text(
-            'Appointments',
+            'Pets',
           ),
           PopupMenuButton(
             shape: RoundedRectangleBorder(
@@ -97,7 +95,7 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
                         Icon(Icons.message,
                             color: Color.fromARGB(255, 36, 57, 247)),
                         SizedBox(width: 8),
-                        Text('Messages'),
+                        Text('Appointments'),
                       ],
                     ),
                   ),
@@ -111,10 +109,10 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.pets,
+                        Icon(Icons.message,
                             color: Color.fromARGB(255, 36, 57, 247)),
                         SizedBox(width: 8),
-                        Text('Pets'),
+                        Text('Messages'),
                       ],
                     ),
                   ),
@@ -142,9 +140,9 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
             onSelected: (value) {
               if (value == 'Opcion 1') {
                 Navigator.pushReplacementNamed(
-                    context, 'messagesveterinaryscreen');
+                    context, 'veterinaryscreen');
               } else if (value == 'Opcion 2') {
-                Navigator.pushReplacementNamed(context, 'petscreen');
+                Navigator.pushReplacementNamed(context, 'messagesveterinaryscreen');
               } else if (value == 'Opcion 3') {
                 Provider.of<AuthService>(context, listen: false).logout();
                 Navigator.pushReplacementNamed(context, 'login');
@@ -154,7 +152,7 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
         ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
         centerTitle: true,
       ),
-      body: appointmentService.isLoading
+      body: petService.isLoading
           ? const Center(
               child: CircularProgressIndicator(),
             )
@@ -176,7 +174,7 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
   }
 
   Widget buildListView(BuildContext context) {
-    if (appointmentVeterinary.isEmpty) {
+  if (pets.isEmpty) {
     return Center(
       child: Container(
         padding: EdgeInsets.only(top: 250), 
@@ -201,12 +199,8 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
         crossAxisSpacing: 20,
         mainAxisSpacing: 20,
       ),
-      itemCount: appointmentVeterinary.length,
+      itemCount: pets.length,
       itemBuilder: (BuildContext context, index) {
-        String fechaCompleta = appointmentVeterinary[index].date!;
-        List<String> partes = fechaCompleta.split('T');
-        String fecha = partes[0];
-
         return Stack(
           children: [
             Card(
@@ -224,25 +218,31 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          fecha,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.start,
+                          '${pets[index].animal != null ? pets[index].animal![0].toUpperCase() + pets[index].animal!.substring(1) : ''}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          '${pets[index].animal != null ? pets[index].breed![0].toUpperCase() + pets[index].breed!.substring(1) : ''}',
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                     ),
                     const SizedBox(height: 10),
                     Divider(color: Colors.black),
                     Text(
-                      '${appointmentVeterinary[index].hour}',
+                      '${pets[index].name != null ? pets[index].name![0].toUpperCase() + pets[index].name!.substring(1) : ''}',
                       style: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.start,
                     ),
+                    Text(
+                      '${pets[index].age} years',
+                      style: const TextStyle(fontSize: 18),
+                      textAlign: TextAlign.start,
+                    ),
+                    Divider(color: Colors.black),
                   ],
                 ),
               ),
@@ -264,7 +264,7 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text("Delete appointment"),
+                          title: Text("Delete pet"),
                           content: Text("Are you sure?"),
                           actions: [
                             TextButton(
@@ -276,11 +276,10 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
                             TextButton(
                               child: Text("Delete"),
                               onPressed: () async {
-                                await appointmentService.deleteAppointment(
-                                    appointmentVeterinary[index].id!);
+                                await petService.deletePet(pets[index].id!);
                                 Navigator.of(context).pop();
                                 setState(() {
-                                  appointmentVeterinary.removeAt(index);
+                                  pets.removeAt(index);
                                 });
                               },
                             ),
@@ -297,7 +296,9 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
       },
     );
   }
-  }
+}
+
+
   void customToast(String s, BuildContext context) {
     showToast(
       s,

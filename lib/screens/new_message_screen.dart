@@ -97,7 +97,7 @@ class _NewReportScreen extends State<NewMessageScreen> {
               if (value == 'Opcion 1') {
                 Navigator.pushReplacementNamed(context, 'veterinaryscreen');
               } else if (value == 'Opcion 2') {
-                Navigator.pushReplacementNamed(context, 'updateuserscreen');
+                Navigator.pushReplacementNamed(context, 'petscreen');
               } else if (value == 'Opcion 3') {
                 Provider.of<AuthService>(context, listen: false).logout();
                 Navigator.pushReplacementNamed(context, 'login');

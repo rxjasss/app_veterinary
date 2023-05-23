@@ -217,7 +217,7 @@ class _UserScreenState extends State<UserScreen> {
                       textAlign: TextAlign.start,
                     ),
                     Text(
-                      '${petUser[index].age}',
+                      '${petUser[index].age} years',
                       style: const TextStyle(fontSize: 18),
                       textAlign: TextAlign.start,
                     ),
