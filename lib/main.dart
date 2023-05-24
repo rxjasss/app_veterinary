@@ -91,6 +91,7 @@ class MyApp extends StatelessWidget {
           'messagesuserscreen': (_) => MessagesUserScreen(),
           'messagesveterinaryscreen': (_) => MessagesVeterinaryScreen(),
           'petscreen': (_) => PetScreen(),
+          'newpetscreen': (_) => NewPetScreen(),
         },
         scaffoldMessengerKey: NotificationsService.messengerKey,
         theme: ThemeData.light().copyWith(

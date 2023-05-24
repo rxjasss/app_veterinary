@@ -8,3 +8,4 @@ export 'package:app_veterinary/screens/messages_user_screen.dart';
 export 'package:app_veterinary/screens/new_message_screen.dart';
 export 'package:app_veterinary/screens/update_user_screen.dart';
 export 'package:app_veterinary/screens/pet_screen.dart';
+export 'package:app_veterinary/screens/new_pet_screen.dart';

@@ -120,7 +120,7 @@ class _NewReportScreen extends State<NewMessageScreen> {
                   style: Theme.of(context).textTheme.headline4),
               SizedBox(height: 30),
               ChangeNotifierProvider(
-                  create: (_) => LoginFormProvider(), child: _MessageForm(idVeterinary: idVeterinary))
+                  create: (_) => ReportProvider(), child: _MessageForm(idVeterinary: idVeterinary))
             ],
           )),
           SizedBox(height: 50),
@@ -243,8 +243,8 @@ class __Form extends State<_MessageForm> {
                     : () async {
 
                         FocusScope.of(context).unfocus();
-                        final authService =
-                            Provider.of<AuthService>(context, listen: false);
+                        final reportService =
+                            Provider.of<ReportService>(context, listen: false);
 
                         if (!reportForm.isValidForm()) return;
 

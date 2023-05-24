@@ -191,7 +191,7 @@ class _UserScreenState extends State<MessagesVeterinaryScreen> {
 
   Widget buildListView(BuildContext context) {
     List<Report> reversedList =
-        List.from(reportVeterinary.reversed); // Invertir el orden de la lista
+        List.from(reportVeterinary.reversed);
     if (reversedList.isEmpty) {
     return Center(
       child: Container(

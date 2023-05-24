@@ -23,8 +23,7 @@ class _PetScreenState extends State<PetScreen> {
   bool desactivate = true;
 
   Future getPets() async {
-    await petService
-        .getListPets();
+    await petService.getListPets();
     setState(() {
       pets = petService.pets;
     });
@@ -139,10 +138,10 @@ class _PetScreenState extends State<PetScreen> {
             },
             onSelected: (value) {
               if (value == 'Opcion 1') {
-                Navigator.pushReplacementNamed(
-                    context, 'veterinaryscreen');
+                Navigator.pushReplacementNamed(context, 'veterinaryscreen');
               } else if (value == 'Opcion 2') {
-                Navigator.pushReplacementNamed(context, 'messagesveterinaryscreen');
+                Navigator.pushReplacementNamed(
+                    context, 'messagesveterinaryscreen');
               } else if (value == 'Opcion 3') {
                 Provider.of<AuthService>(context, listen: false).logout();
                 Navigator.pushReplacementNamed(context, 'login');
@@ -170,134 +169,147 @@ class _PetScreenState extends State<PetScreen> {
                 ),
               ),
             ),
+      floatingActionButton: RawMaterialButton(
+        onPressed: () {
+          Navigator.pushReplacementNamed(context, 'newpetscreen');
+        },
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        fillColor: Color.fromARGB(255, 36, 57, 247),
+        child: Icon(Icons.add_box, color: Colors.white),
+        constraints: BoxConstraints.tightFor(
+          width: 40.0,
+          height: 40.0,
+        ),
+      ),
     );
   }
 
   Widget buildListView(BuildContext context) {
-  if (pets.isEmpty) {
-    return Center(
-      child: Container(
-        padding: EdgeInsets.only(top: 250), 
-        child: Text(
-          'Here is nothing to see yet...',
-          style: TextStyle(
-            fontSize: 20,
-            color: Color.fromARGB(255, 151, 144, 144),
-            fontStyle: FontStyle.italic,
+    if (pets.isEmpty) {
+      return Center(
+        child: Container(
+          padding: EdgeInsets.only(top: 250),
+          child: Text(
+            'Here is nothing to see yet...',
+            style: TextStyle(
+              fontSize: 20,
+              color: Color.fromARGB(255, 151, 144, 144),
+              fontStyle: FontStyle.italic,
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
         ),
-      ),
-    );
-  } else {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(30),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 20,
-        mainAxisSpacing: 20,
-      ),
-      itemCount: pets.length,
-      itemBuilder: (BuildContext context, index) {
-        return Stack(
-          children: [
-            Card(
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${pets[index].animal != null ? pets[index].animal![0].toUpperCase() + pets[index].animal!.substring(1) : ''}',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          '${pets[index].animal != null ? pets[index].breed![0].toUpperCase() + pets[index].breed!.substring(1) : ''}',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Divider(color: Colors.black),
-                    Text(
-                      '${pets[index].name != null ? pets[index].name![0].toUpperCase() + pets[index].name!.substring(1) : ''}',
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+      );
+    } else {
+      return GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(30),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 20,
+          mainAxisSpacing: 20,
+        ),
+        itemCount: pets.length,
+        itemBuilder: (BuildContext context, index) {
+          return Stack(
+            children: [
+              Card(
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${pets[index].animal != null ? pets[index].animal![0].toUpperCase() + pets[index].animal!.substring(1) : ''}',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          Text(
+                            '${pets[index].animal != null ? pets[index].breed![0].toUpperCase() + pets[index].breed!.substring(1) : ''}',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
                       ),
-                      textAlign: TextAlign.start,
-                    ),
-                    Text(
-                      '${pets[index].age} years',
-                      style: const TextStyle(fontSize: 18),
-                      textAlign: TextAlign.start,
-                    ),
-                    Divider(color: Colors.black),
-                  ],
+                      const SizedBox(height: 10),
+                      Divider(color: Colors.black),
+                      Text(
+                        '${pets[index].name != null ? pets[index].name![0].toUpperCase() + pets[index].name!.substring(1) : ''}',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                      Text(
+                        '${pets[index].age} years',
+                        style: const TextStyle(fontSize: 18),
+                        textAlign: TextAlign.start,
+                      ),
+                      Divider(color: Colors.black),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 10,
-              right: 10,
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 36, 57, 247),
-                  shape: BoxShape.circle,
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.delete, color: Colors.white),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("Delete pet"),
-                          content: Text("Are you sure?"),
-                          actions: [
-                            TextButton(
-                              child: Text("Cancel"),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            TextButton(
-                              child: Text("Delete"),
-                              onPressed: () async {
-                                await petService.deletePet(pets[index].id!);
-                                Navigator.of(context).pop();
-                                setState(() {
-                                  pets.removeAt(index);
-                                });
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
+              Positioned(
+                bottom: 10,
+                right: 10,
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 36, 57, 247),
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.delete, color: Colors.white),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Delete pet"),
+                            content: Text("Are you sure?"),
+                            actions: [
+                              TextButton(
+                                child: Text("Cancel"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: Text("Delete"),
+                                onPressed: () async {
+                                  await petService.deletePet(pets[index].id!);
+                                  Navigator.of(context).pop();
+                                  setState(() {
+                                    pets.removeAt(index);
+                                  });
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-          ],
-        );
-      },
-    );
+            ],
+          );
+        },
+      );
+    }
   }
-}
-
 
   void customToast(String s, BuildContext context) {
     showToast(
