@@ -255,7 +255,7 @@ class _UserScreenState extends State<UserScreen> {
                 child: IconButton(
                   icon: Icon(Icons.add, color: Colors.white),
                   onPressed: () {
-                    // Acción a realizar cuando se presione el botón "+"
+                    Navigator.pushReplacementNamed(context, 'appointmentspetscreen',arguments:petUser[index].id);
                   },
                 ),
               ),

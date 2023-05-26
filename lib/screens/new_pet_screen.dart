@@ -248,7 +248,7 @@ class __Form extends State<_PetForm> {
                   petForm.age = int.parse(value);
                 } catch (e) {
                   customToast(
-                      'Invalid age. Please enter a valid integer.', context);
+                      'Invalid age. Please enter a valid number.', context);
                 }
               },
               maxLines: null,

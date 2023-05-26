@@ -1,5 +1,6 @@
 import 'package:app_veterinary/Models/report.dart';
 import 'package:app_veterinary/providers/providers.dart';
+import 'package:app_veterinary/screens/appointments_pet_screen.dart';
 import 'package:app_veterinary/screens/messages_veterinary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -77,6 +78,11 @@ class MyApp extends StatelessWidget {
             final int id = settings.arguments as int;
             return MaterialPageRoute(
               builder: (context) => NewMessageScreen(idVeterinary: id),
+            );
+          }else if(settings.name == 'appointmentspetscreen'){
+            final int id = settings.arguments as int;
+            return MaterialPageRoute(
+              builder: (context) => AppointmentsPetScreen(idPet: id),
             );
           }
           return null;

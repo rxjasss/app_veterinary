@@ -9,6 +9,7 @@ class AppointmentService extends ChangeNotifier {
   final String _baseUrl = '192.168.2.7:8080';
   bool isLoading = true;
   List<Appointment> appointments = [];
+  List<Appointment> appointmentsPets = [];
   String appointment = "";
   Appointment a = Appointment();
   final storage = const FlutterSecureStorage();
@@ -18,7 +19,7 @@ class AppointmentService extends ChangeNotifier {
     appointments.clear();
     String? token = await AuthService().readToken();
 
-    final url = Uri.http(_baseUrl, 'api/veterinary/appointments/$idVeterinary');
+    final url = Uri.http(_baseUrl, '/api/veterinary/appointments/$idVeterinary');
 
     isLoading = true;
     notifyListeners();
@@ -47,6 +48,38 @@ class AppointmentService extends ChangeNotifier {
     return appointmentList;
   }
 
+//GET PET APPOINTMENTS 
+  getAppointmentsPet(String idPet) async {
+    appointmentsPets.clear();
+    String? token = await AuthService().readToken();
+
+    final url = Uri.http(_baseUrl, '/api/user/appointments/$idPet');
+
+    isLoading = true;
+    notifyListeners();
+    final resp = await http.get(
+      url,
+      headers: {"Authorization": "Bearer $token"},
+    );
+
+    final List<dynamic> decodedResp = json.decode(resp.body);
+
+    List<Appointment> appointmentListPets = decodedResp
+        .map((e) => Appointment(
+              id: e['id'],
+              idPet: e['idPet'],
+              idUser: e['idUser'],
+              hour: e['hour'],
+              date: e['date'],
+              
+            ))
+        .toList();
+    appointmentsPets = appointmentListPets;
+    isLoading = false;
+    notifyListeners();
+
+    return appointmentListPets;
+  }
 
   //DELETE APPOINTEMENT
   deleteAppointment(int id) async {
