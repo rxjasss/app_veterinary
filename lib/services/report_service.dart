@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'services.dart';
 
 class ReportService extends ChangeNotifier {
-  final String _baseUrl = '192.168.2.7:8080';
+  final String _baseUrl = '192.168.2.10:8080';
   bool isLoading = true;
   List<Report> reports = [];
   String report = "";

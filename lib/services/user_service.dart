@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:app_veterinary/Models/models.dart';
 
 class UserService extends ChangeNotifier {
-  final String _baseUrl = '192.168.2.7:8080';
+  final String _baseUrl = '192.168.2.10:8080';
   bool isLoading = true;
   
   String usuario = "";
@@ -94,7 +94,7 @@ class UserService extends ChangeNotifier {
     veterinarys.clear();
     isLoading = true;
     notifyListeners();
-    final url = Uri.http(_baseUrl, '/api/all/veterinarys');
+    final url = Uri.http(_baseUrl, '/all/veterinarys');
     String? token = await AuthService().readToken();
 
     final resp = await http.get(
@@ -111,7 +111,7 @@ class UserService extends ChangeNotifier {
               password: u['password'],
             ))
         .toList();
-    users = veterinarysList;
+    veterinarys = veterinarysList;
 
     isLoading = false;
     notifyListeners();

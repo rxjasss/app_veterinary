@@ -1,10 +1,7 @@
 import 'package:app_veterinary/Models/models.dart';
-import 'package:app_veterinary/services/auth_service.dart';
 import 'package:app_veterinary/services/services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
 
 class AppointmentsPetScreen extends StatefulWidget {
@@ -24,7 +21,6 @@ class _UserScreenState extends State<AppointmentsPetScreen> {
 
   List<Appointment> appointmentsPet = [];
   List<Appointment> appointments = [];
-  int veterinary = 0;
   bool desactivate = true;
 
   Future getAppointments() async {
@@ -182,9 +178,9 @@ class _UserScreenState extends State<AppointmentsPetScreen> {
                 ),
               ),
             ),
-      /*floatingActionButton: RawMaterialButton(
+      floatingActionButton: RawMaterialButton(
         onPressed: () {
-          Navigator.pushReplacementNamed(context, 'newmessagescreen',arguments:veterinary);
+          Navigator.pushReplacementNamed(context, 'newappointmentscreen',arguments:idPet);
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -195,7 +191,7 @@ class _UserScreenState extends State<AppointmentsPetScreen> {
           width: 40.0,
           height: 40.0,
         ),
-      ),*/
+      ),
     );
   }
 
@@ -295,7 +291,6 @@ class _UserScreenState extends State<AppointmentsPetScreen> {
                             TextButton(
                               child: Text("Yes"),
                               onPressed: () async {
-                                print(appointmentsPet[index].id!);
                                 await appointmentService.deleteAppointment(
                                     appointmentsPet[index].id!);
                                 Navigator.of(context).pop();

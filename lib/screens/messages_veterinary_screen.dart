@@ -258,16 +258,24 @@ class _UserScreenState extends State<MessagesVeterinaryScreen> {
 }
 }
 
-void customToast(String s, BuildContext context) {
-  showToast(
-    s,
-    context: context,
-    animation: StyledToastAnimation.scale,
-    reverseAnimation: StyledToastAnimation.fade,
-    position: StyledToastPosition.top,
-    animDuration: const Duration(seconds: 1),
-    duration: const Duration(seconds: 4),
-    curve: Curves.elasticOut,
-    reverseCurve: Curves.linear,
-  );
+void customToast(String message, BuildContext context) {
+    showToast(
+      message,
+      textStyle: const TextStyle(
+        fontSize: 14,
+        wordSpacing: 0.1,
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      ),
+      textPadding: const EdgeInsets.all(23),
+      fullWidth: true,
+      toastHorizontalMargin: 25,
+      borderRadius: BorderRadius.circular(15),
+      backgroundColor: Colors.blue,
+      alignment: Alignment.topCenter,
+      position: StyledToastPosition.bottom,
+      duration: const Duration(seconds: 3),
+      animation: StyledToastAnimation.slideFromBottom,
+      context: context,
+    );
 }

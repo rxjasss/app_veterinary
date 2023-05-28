@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'services.dart';
 
 class AppointmentService extends ChangeNotifier {
-  final String _baseUrl = '192.168.2.7:8080';
+  final String _baseUrl = '192.168.2.10:8080';
   bool isLoading = true;
   List<Appointment> appointments = [];
   List<Appointment> appointmentsPets = [];
@@ -81,7 +81,41 @@ class AppointmentService extends ChangeNotifier {
     return appointmentListPets;
   }
 
-  //DELETE APPOINTEMENT
+  //CREATE APPOINTMENT
+  Future create(
+    String date,
+    String hour,
+    int idPet,
+    int idUser,
+  ) async {
+    String? token = await AuthService().readToken();
+    isLoading = false;
+    notifyListeners();
+    final Map<String, dynamic> appointmentData = {
+      'date': date,
+      'hour': hour,
+      'idPet': idPet,
+      'idUser': idUser,
+    };
+
+    final url = Uri.http(_baseUrl, '/api/user/appointment');
+
+    final resp = await http.post(
+      url,
+      headers: {
+        "content-type": "application/json",
+        "Authorization": "Bearer $token"
+      },
+      body: json.encode(appointmentData),
+    );
+    isLoading = false;
+    notifyListeners();
+
+    if (resp.statusCode == 200) {}
+    return resp.statusCode.toString();
+  }
+
+  //DELETE APPOINTMENT
   deleteAppointment(int id) async {
     String? token = await AuthService().readToken();
 

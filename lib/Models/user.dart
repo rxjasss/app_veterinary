@@ -41,4 +41,5 @@ class User {
     data['token'] = this.token;
     return data;
   }
+  
 }
