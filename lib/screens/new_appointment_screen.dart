@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'package:app_veterinary/widgets/background.dart';
 import 'package:app_veterinary/Models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -27,16 +27,121 @@ class _NewAppointmentScreen extends State<NewAppointmentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: AuthBackground(
+        appBar: AppBar(
+          title: Row(children: [
+            Icon(
+              Icons.info_rounded,
+            ),
+            Text(
+              'Appointment',
+            ),
+            PopupMenuButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              offset: Offset(0, 50),
+              itemBuilder: (BuildContext context) {
+                return <PopupMenuEntry>[
+                  PopupMenuItem(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color:
+                            Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.message,
+                              color: Color.fromARGB(255, 36, 57, 247)),
+                          SizedBox(width: 8),
+                          Text('Messages'),
+                        ],
+                      ),
+                    ),
+                    value: 'Opcion 1',
+                  ),
+                  PopupMenuItem(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color:
+                            Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.account_box_sharp,
+                              color: Color.fromARGB(255, 36, 57, 247)),
+                          SizedBox(width: 8),
+                          Text('User options'),
+                        ],
+                      ),
+                    ),
+                    value: 'Opcion 2',
+                  ),
+                  PopupMenuItem(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color:
+                            Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.pets,
+                              color: Color.fromARGB(255, 36, 57, 247)),
+                          SizedBox(width: 8),
+                          Text('Pets'),
+                        ],
+                      ),
+                    ),
+                    value: 'Opcion 3',
+                  ),
+                  PopupMenuItem(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color:
+                            Color.fromARGB(255, 36, 57, 247).withOpacity(0.1),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.logout,
+                              color: Color.fromARGB(255, 36, 57, 247)),
+                          SizedBox(width: 8),
+                          Text('Logout'),
+                        ],
+                      ),
+                    ),
+                    value: 'Opcion 4',
+                  ),
+                ];
+              },
+              onSelected: (value) {
+                if (value == 'Opcion 1') {
+                  Navigator.pushReplacementNamed(context, 'messagesuserscreen');
+                } else if (value == 'Opcion 2') {
+                  Navigator.pushReplacementNamed(context, 'updateuserscreen');
+                } else if (value == 'Opcion 3') {
+                  Navigator.pushReplacementNamed(context, 'userscreen');
+                } else if (value == 'Opcion 4') {
+                  Provider.of<AuthService>(context, listen: false).logout();
+                  Navigator.pushReplacementNamed(context, 'login');
+                }
+              },
+            )
+          ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+          centerTitle: true,
+        ),
+        body: Background(
             child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 250),
+              SizedBox(height: 150),
               CardContainer(
                   child: Column(
                 children: [
                   SizedBox(height: 10),
-                  Text('New Appointment',
+                  Text('Take Appointment',
                       style: Theme.of(context).textTheme.headline4),
                   SizedBox(height: 30),
                   ChangeNotifierProvider(
@@ -94,14 +199,11 @@ class __Form extends State<_Form> {
     List<String> disps = [];
     List<String> fechaS = select.toString().split(' ');
 
-
     for (int i = 0; i < appointments.length; i++) {
-
       if (appointments[i].idUser == id) {
         appDep.add(appointments[i]);
       }
     }
-
 
     for (int i = 0; i < appDep.length; i++) {
       List<String> fechaD = appDep[i].date.toString().split('T');
@@ -216,8 +318,9 @@ class __Form extends State<_Form> {
                     },
                     child: Text(
                       'Date:',
-                      style: TextStyle(color: Color.fromARGB(255, 36, 57, 247),
-                      fontSize: 14,
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 36, 57, 247),
+                        fontSize: 14,
                       ),
                     )),
                 Visibility(
