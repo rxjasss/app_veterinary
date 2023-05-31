@@ -224,19 +224,19 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          fecha,
+                          'Date:\n$fecha',
                           style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.start,
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 5),
                     Divider(color: Colors.black),
                     Text(
-                      '${appointmentVeterinary[index].hour}',
+                      'Hour:${appointmentVeterinary[index].hour}',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
