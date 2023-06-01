@@ -8,6 +8,7 @@ import '../providers/providers.dart';
 import '../services/services.dart';
 import '../ui/input_decorations.dart';
 import '../widgets/widgets.dart';
+import 'package:intl/intl.dart';
 
 class NewAppointmentScreen extends StatefulWidget {
   final int idPet;
@@ -324,9 +325,12 @@ class __Form extends State<_Form> {
                       ),
                     )),
                 Visibility(
-                    visible: appointmentForm.hour != null,
-                    child:
-                        Text(appointmentForm.date.toString().substring(0, 10))),
+                  visible: appointmentForm.date != null &&
+                      appointmentForm.date != DateTime(0),
+                  child: Text(
+                    DateFormat('dd-MM-yyyy').format(appointmentForm.date),
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 30),
@@ -366,10 +370,11 @@ class __Form extends State<_Form> {
                 onPressed: appointmentForm.isLoading
                     ? null
                     : () async {
-                        if (appointmentForm.date.isUtc ||
+                        if (appointmentForm.date == null ||
+                            appointmentForm.date == DateTime(0) ||
                             appointmentForm.hour.isEmpty ||
                             appointmentForm.idVeterinary == 0) {
-                          customToast("Fiels can't be empty", context);
+                          customToast("Fields can't be empty", context);
                         } else {
                           FocusScope.of(context).unfocus();
                           final authService =

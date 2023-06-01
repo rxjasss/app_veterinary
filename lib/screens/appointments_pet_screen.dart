@@ -3,6 +3,7 @@ import 'package:app_veterinary/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class AppointmentsPetScreen extends StatefulWidget {
   final int idPet;
@@ -233,7 +234,8 @@ class _UserScreenState extends State<AppointmentsPetScreen> {
         itemBuilder: (BuildContext context, index) {
           String fechaCompleta = appointmentsPet[index].date!;
           List<String> partes = fechaCompleta.split('T');
-          String fecha = partes[0];
+          DateTime fecha = DateTime.parse(partes[0]);
+          String fechaFormateada = DateFormat('dd-MM-yyyy').format(fecha);
           return SizedBox(
             height: 120,
             child: Card(
@@ -253,7 +255,7 @@ class _UserScreenState extends State<AppointmentsPetScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Date: ' + fecha,
+                              'Date: ' + fechaFormateada,
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

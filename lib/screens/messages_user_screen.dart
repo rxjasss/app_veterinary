@@ -217,7 +217,7 @@ class _UserScreenState extends State<MessagesUserScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${reversedList[index].idVeterinary}',
+                          'Message received:',
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.start,

@@ -231,7 +231,7 @@ class _UserScreenState extends State<MessagesVeterinaryScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${reversedList[index].idUser}',
+                        'You have sent:',
                         style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.start,
