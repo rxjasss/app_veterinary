@@ -233,8 +233,8 @@ class _UserScreenState extends State<AppointmentsPetScreen> {
         itemCount: appointmentsPet.length,
         itemBuilder: (BuildContext context, index) {
           String fechaCompleta = appointmentsPet[index].date!;
-          List<String> partes = fechaCompleta.split('T');
-          DateTime fecha = DateTime.parse(partes[0]);
+          List<String> fechaSeparada = fechaCompleta.split('T');
+          DateTime fecha = DateTime.parse(fechaSeparada[0]);
           String fechaFormateada = DateFormat('dd-MM-yyyy').format(fecha);
           return SizedBox(
             height: 120,

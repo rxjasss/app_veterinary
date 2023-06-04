@@ -6,6 +6,7 @@ import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class VeterinaryScreen extends StatefulWidget {
   const VeterinaryScreen({Key? key}) : super(key: key);
@@ -204,8 +205,9 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
       itemCount: appointmentVeterinary.length,
       itemBuilder: (BuildContext context, index) {
         String fechaCompleta = appointmentVeterinary[index].date!;
-        List<String> partes = fechaCompleta.split('T');
-        String fecha = partes[0];
+        List<String> fechaSeparada = fechaCompleta.split('T');
+          DateTime fecha = DateTime.parse(fechaSeparada[0]);
+          String fechaFormateada = DateFormat('dd-MM-yyyy').format(fecha);
 
         return Stack(
           children: [
@@ -224,7 +226,7 @@ class _VeterinaryScreenState extends State<VeterinaryScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Date:\n$fecha',
+                          'Date:\n$fechaFormateada',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
