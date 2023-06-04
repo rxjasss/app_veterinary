@@ -253,24 +253,31 @@ class __LoginForm extends State<_LoginForm> {
   }
 
   void customToast(String message, BuildContext context) {
-    showToast(
-      message,
-      textStyle: const TextStyle(
-        fontSize: 14,
-        wordSpacing: 0.1,
-        color: Colors.white,
-        fontWeight: FontWeight.bold,
-      ),
-      textPadding: const EdgeInsets.all(23),
-      fullWidth: true,
-      toastHorizontalMargin: 25,
-      borderRadius: BorderRadius.circular(15),
-      backgroundColor: Color.fromARGB(255, 36, 57, 247),
-      alignment: Alignment.topCenter,
-      position: StyledToastPosition.bottom,
-      duration: const Duration(seconds: 3),
-      animation: StyledToastAnimation.slideFromBottom,
-      context: context,
-    );
-  }
+  showToast(
+    message,
+    textStyle: const TextStyle(
+      fontSize: 16,
+      color: Color.fromARGB(255, 36, 57, 247),
+      fontWeight: FontWeight.bold,
+    ),
+    textPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+    fullWidth: true,
+    toastHorizontalMargin: 40,
+    borderRadius: const BorderRadius.only(
+      topLeft: Radius.circular(30),
+      topRight: Radius.circular(0),
+      bottomLeft: Radius.circular(0),
+      bottomRight: Radius.circular(30),
+    ),
+    backgroundColor: Colors.white,
+    alignment: Alignment.bottomCenter,
+    position: StyledToastPosition.bottom,
+    duration: const Duration(seconds: 3),
+    animation: StyledToastAnimation.slideToTop,
+    reverseAnimation: StyledToastAnimation.slideToBottom,
+    curve: Curves.easeInOut,
+    reverseCurve: Curves.easeInOut,
+    context: context,
+  );
+}
 }
