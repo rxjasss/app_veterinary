@@ -112,6 +112,7 @@ class _LoginForm extends StatelessWidget {
                         if (spliter?[1] == '200') {
                           if (spliter?[2] == 'false') {
                             customToast('User isn\'t enabled', context);
+                            loginForm.isLoading = false;
                           } else {
                             if (spliter?[0] == 'ROLE_VETERINARY') {
                               Navigator.pushReplacementNamed(
@@ -124,7 +125,7 @@ class _LoginForm extends StatelessWidget {
                         } else {
                           customToast(
                               'Username or password incorrect', context);
-                          Navigator.pushReplacementNamed(context, 'login');
+                          loginForm.isLoading = false;
                         }
                       })
           ],
