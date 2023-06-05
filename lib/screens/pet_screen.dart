@@ -264,45 +264,72 @@ class _PetScreenState extends State<PetScreen> {
                 bottom: 10,
                 right: 10,
                 child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 36, 57, 247),
-                    shape: BoxShape.circle,
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.delete, color: Colors.white),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text("Delete pet"),
-                            content: Text("Are you sure?"),
-                            actions: [
-                              TextButton(
-                                child: Text("Cancel"),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              TextButton(
-                                child: Text("Delete"),
-                                onPressed: () async {
-                                  await petService.deletePet(pets[index].id!);
-                                  Navigator.of(context).pop();
-                                  setState(() {
-                                    pets.removeAt(index);
-                                  });
-                                },
-                              ),
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 36, 57, 247),
+                      shape: BoxShape.circle,
+                    ),
+                    child: PopupMenuButton<String>(
+                      itemBuilder: (BuildContext context) =>
+                          <PopupMenuEntry<String>>[
+                        PopupMenuItem<String>(
+                          value: 'update',
+                          child: Row(
+                            children: [
+                              Icon(Icons.update, color: Colors.black),
+                              SizedBox(width: 8),
+                              Text('Update'),
                             ],
+                          ),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'delete',
+                          child: Row(
+                            children: [
+                              Icon(Icons.delete, color: Colors.black),
+                              SizedBox(width: 8),
+                              Text('Delete'),
+                            ],
+                          ),
+                        ),
+                      ],
+                      onSelected: (String value) {
+                        if (value == 'delete') {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("Delete pet"),
+                                content: Text("Are you sure?"),
+                                actions: [
+                                  TextButton(
+                                    child: Text("Cancel"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text("Delete"),
+                                    onPressed: () async {
+                                      await petService
+                                          .deletePet(pets[index].id!);
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        pets.removeAt(index);
+                                      });
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
                           );
-                        },
-                      );
-                    },
-                  ),
-                ),
+                        } else if (value == 'update') {
+                          // Código para la opción "Update"
+                        }
+                      },
+                      child: Icon(Icons.more_vert, color: Colors.white),
+                    )),
               ),
             ],
           );
@@ -312,31 +339,31 @@ class _PetScreenState extends State<PetScreen> {
   }
 
   void customToast(String message, BuildContext context) {
-  showToast(
-    message,
-    textStyle: const TextStyle(
-      fontSize: 16,
-      color: Color.fromARGB(255, 36, 57, 247),
-      fontWeight: FontWeight.bold,
-    ),
-    textPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-    fullWidth: true,
-    toastHorizontalMargin: 40,
-    borderRadius: const BorderRadius.only(
-      topLeft: Radius.circular(30),
-      topRight: Radius.circular(0),
-      bottomLeft: Radius.circular(0),
-      bottomRight: Radius.circular(30),
-    ),
-    backgroundColor: Colors.white,
-    alignment: Alignment.bottomCenter,
-    position: StyledToastPosition.bottom,
-    duration: const Duration(seconds: 3),
-    animation: StyledToastAnimation.slideToTop,
-    reverseAnimation: StyledToastAnimation.slideToBottom,
-    curve: Curves.easeInOut,
-    reverseCurve: Curves.easeInOut,
-    context: context,
-  );
-}
+    showToast(
+      message,
+      textStyle: const TextStyle(
+        fontSize: 16,
+        color: Color.fromARGB(255, 36, 57, 247),
+        fontWeight: FontWeight.bold,
+      ),
+      textPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      fullWidth: true,
+      toastHorizontalMargin: 40,
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(30),
+        topRight: Radius.circular(0),
+        bottomLeft: Radius.circular(0),
+        bottomRight: Radius.circular(30),
+      ),
+      backgroundColor: Colors.white,
+      alignment: Alignment.bottomCenter,
+      position: StyledToastPosition.bottom,
+      duration: const Duration(seconds: 3),
+      animation: StyledToastAnimation.slideToTop,
+      reverseAnimation: StyledToastAnimation.slideToBottom,
+      curve: Curves.easeInOut,
+      reverseCurve: Curves.easeInOut,
+      context: context,
+    );
+  }
 }
