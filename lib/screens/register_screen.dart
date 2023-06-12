@@ -56,7 +56,7 @@ class _LoginForm extends StatelessWidget {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           children: [
-            SizedBox(height: 15),
+            
             TextFormField(
               autocorrect: false,
               maxLength: 12,
@@ -67,7 +67,7 @@ class _LoginForm extends StatelessWidget {
                   prefixIcon: Icons.abc),
               onChanged: (value) => loginForm.name = value,
             ),
-            SizedBox(height: 15),
+            
             TextFormField(
               autocorrect: false,
               maxLength: 12,
@@ -78,7 +78,7 @@ class _LoginForm extends StatelessWidget {
                   prefixIcon: Icons.account_circle_sharp),
               onChanged: (value) => loginForm.surname = value,
             ),
-            SizedBox(height: 15),
+            
             TextFormField(
               autocorrect: false,
               maxLength: 12,
@@ -89,7 +89,7 @@ class _LoginForm extends StatelessWidget {
                   prefixIcon: Icons.account_circle_sharp),
               onChanged: (value) => loginForm.username = value,
             ),
-            SizedBox(height: 15),
+            
             TextFormField(
               autocorrect: false,
               obscureText: true,
@@ -100,7 +100,7 @@ class _LoginForm extends StatelessWidget {
                   prefixIcon: Icons.lock_outline),
               onChanged: (value) => loginForm.password = value,
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 10),
             MaterialButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),

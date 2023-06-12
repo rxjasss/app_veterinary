@@ -213,7 +213,7 @@ class __Form extends State<_PetForm> {
               onChanged: (value) => petForm.animal = value,
               maxLines: null,
             ),
-            SizedBox(height: 10),
+
             TextFormField(
               autocorrect: false,
               maxLength: 12,
@@ -225,7 +225,7 @@ class __Form extends State<_PetForm> {
               onChanged: (value) => petForm.breed = value,
               maxLines: null,
             ),
-            SizedBox(height: 10),
+
             TextFormField(
               autocorrect: false,
               maxLength: 12,
