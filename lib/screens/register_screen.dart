@@ -59,6 +59,7 @@ class _LoginForm extends StatelessWidget {
             SizedBox(height: 15),
             TextFormField(
               autocorrect: false,
+              maxLength: 12,
               keyboardType: TextInputType.text,
               decoration: InputDecorations.authInputDecoration(
                   hintText: 'Name...',
@@ -69,6 +70,7 @@ class _LoginForm extends StatelessWidget {
             SizedBox(height: 15),
             TextFormField(
               autocorrect: false,
+              maxLength: 12,
               keyboardType: TextInputType.text,
               decoration: InputDecorations.authInputDecoration(
                   hintText: 'Surname...',
@@ -79,6 +81,7 @@ class _LoginForm extends StatelessWidget {
             SizedBox(height: 15),
             TextFormField(
               autocorrect: false,
+              maxLength: 12,
               keyboardType: TextInputType.text,
               decoration: InputDecorations.authInputDecoration(
                   hintText: 'Username...',

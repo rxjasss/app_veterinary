@@ -204,6 +204,7 @@ class __Form extends State<_PetForm> {
             SizedBox(height: 10),
             TextFormField(
               autocorrect: false,
+              maxLength: 12,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecorations.authInputDecoration(
                   hintText: 'Animal...',
@@ -215,6 +216,7 @@ class __Form extends State<_PetForm> {
             SizedBox(height: 10),
             TextFormField(
               autocorrect: false,
+              maxLength: 12,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecorations.authInputDecoration(
                   hintText: 'Breed...',
@@ -226,6 +228,7 @@ class __Form extends State<_PetForm> {
             SizedBox(height: 10),
             TextFormField(
               autocorrect: false,
+              maxLength: 12,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecorations.authInputDecoration(
                   hintText: 'Name...',
@@ -237,6 +240,7 @@ class __Form extends State<_PetForm> {
             SizedBox(height: 10),
             TextFormField(
               autocorrect: false,
+              maxLength: 2,
               keyboardType: TextInputType.number,
               decoration: InputDecorations.authInputDecoration(
                 hintText: 'Age...',
