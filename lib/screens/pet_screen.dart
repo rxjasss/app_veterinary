@@ -273,7 +273,7 @@ class _PetScreenState extends State<PetScreen> {
                     child: PopupMenuButton<String>(
                       itemBuilder: (BuildContext context) =>
                           <PopupMenuEntry<String>>[
-                        PopupMenuItem<String>(
+                        /*PopupMenuItem<String>(
                           value: 'update',
                           child: Row(
                             children: [
@@ -282,7 +282,7 @@ class _PetScreenState extends State<PetScreen> {
                               Text('Update'),
                             ],
                           ),
-                        ),
+                        ),*/
                         PopupMenuItem<String>(
                           value: 'delete',
                           child: Row(
@@ -325,7 +325,7 @@ class _PetScreenState extends State<PetScreen> {
                             },
                           );
                         } else if (value == 'update') {
-                          // Código para la opción "Update"
+                          Navigator.pushReplacementNamed(context, 'updatepetscreen',arguments: pets[index].id);
                         }
                       },
                       child: Icon(Icons.more_vert, color: Colors.white),

@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'services.dart';
 
 class PetService extends ChangeNotifier {
-  final String _baseUrl = '192.168.2.3:8080';
+  final String _baseUrl = '192.168.2.10:8080';
   bool isLoading = true;
   List<Pet> pets = [];
   String pet = "";
@@ -44,7 +44,7 @@ class PetService extends ChangeNotifier {
     return petList;
   }
 
-  //GET USER PETS 
+  //GET USER PETS
   getPetsUser(String id) async {
     pets.clear();
     String? token = await AuthService().readToken();
@@ -144,6 +144,42 @@ class PetService extends ChangeNotifier {
     return resp.statusCode.toString();
   }
 
+  //UPDATE PET
+  Future<String?> update(
+      int id,
+      int age, 
+      String name, 
+      String animal, 
+      String breed
+      ) async {
+    String? token = await AuthService().readToken();
+    final Map<String, dynamic> authData = {
+      'age': age,
+      'name': name,
+      'animal': animal,
+      'breed': breed,
+    };
+
+    final url = Uri.http(_baseUrl, '/api/veterinary/pet/$id');
+    final resp = await http.put(url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: json.encode(authData));
+    final Map<String, dynamic> decodedResp = json.decode(resp.body);
+
+    if (resp.statusCode == 200) {
+      await storage.write(key: 'token', value: decodedResp['token']);
+      await storage.write(key: 'id', value: decodedResp['id'].toString());
+
+      return (resp.statusCode.toString());
+    } else {
+      return (resp.statusCode.toString());
+    }
+  }
+
   //  DELETE PET
   deletePet(int id) async {
     String? token = await AuthService().readToken();
@@ -161,5 +197,4 @@ class PetService extends ChangeNotifier {
     notifyListeners();
     if (resp.statusCode == 200) {}
   }
-  
 }

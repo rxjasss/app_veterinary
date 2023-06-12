@@ -7,7 +7,10 @@ import '../services/services.dart';
 import '../ui/input_decorations.dart';
 import '../widgets/widgets.dart';
 
-class UpdateUserScreen extends StatelessWidget {
+class UpdatePetScreen extends StatelessWidget {
+  final int idPet;
+  const UpdatePetScreen({required this.idPet});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +21,7 @@ class UpdateUserScreen extends StatelessWidget {
               Icons.info,
             ),
             Text(
-              'Info',
+              'Pet info',
             ),
             PopupMenuButton(
               shape: RoundedRectangleBorder(
@@ -39,7 +42,7 @@ class UpdateUserScreen extends StatelessWidget {
                           Icon(Icons.message,
                               color: Color.fromARGB(255, 36, 57, 247)),
                           SizedBox(width: 8),
-                          Text('Messages'),
+                          Text('Appointments'),
                         ],
                       ),
                     ),
@@ -54,10 +57,10 @@ class UpdateUserScreen extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.pets,
+                          Icon(Icons.message,
                               color: Color.fromARGB(255, 36, 57, 247)),
                           SizedBox(width: 8),
-                          Text('Pets'),
+                          Text('Messages'),
                         ],
                       ),
                     ),
@@ -85,9 +88,10 @@ class UpdateUserScreen extends StatelessWidget {
               },
               onSelected: (value) {
                 if (value == 'Opcion 1') {
-                  Navigator.pushReplacementNamed(context, 'messagesuserscreen');
+                  Navigator.pushReplacementNamed(context, 'veterinaryscreen');
                 } else if (value == 'Opcion 2') {
-                  Navigator.pushReplacementNamed(context, 'userscreen');
+                  Navigator.pushReplacementNamed(
+                      context, 'messagesveterinaryscreen');
                 } else if (value == 'Opcion 3') {
                   Provider.of<AuthService>(context, listen: false).logout();
                   Navigator.pushReplacementNamed(context, 'login');
@@ -97,111 +101,143 @@ class UpdateUserScreen extends StatelessWidget {
           ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
           centerTitle: true,
         ),
-        body: AuthBackground(
+        body: Background(
             child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 200),
+              SizedBox(height: 150),
               CardContainer(
                   child: Column(
                 children: [
                   SizedBox(height: 10),
-                  Text('Update your info',
+                  Text('Update pet info',
                       style: Theme.of(context).textTheme.headline4),
                   SizedBox(height: 30),
                   ChangeNotifierProvider(
-                      create: (_) => LoginFormProvider(), child: _LoginForm())
+                      create: (_) => LoginFormProvider(), child: _PetForm(idPet: idPet))
                 ],
               )),
+              SizedBox(height: 50),
+              TextButton(
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, 'petscreen'),
+                  style: ButtonStyle(
+                      overlayColor: MaterialStateProperty.all(
+                          Colors.indigo.withOpacity(0.1)),
+                      shape: MaterialStateProperty.all(StadiumBorder())),
+                  child: Text(
+                    'Back',
+                    style: TextStyle(fontSize: 18, color: Colors.black87),
+                  )),
               SizedBox(height: 50),
             ],
           ),
         )));
   }
 }
-class _LoginForm extends StatefulWidget {
-  const _LoginForm({Key? key}) : super(key: key);
+
+class _PetForm extends StatefulWidget {
+  final int idPet;
+  const _PetForm({required this.idPet});
 
   @override
-  State<_LoginForm> createState() => __LoginForm();
+  State<_PetForm> createState() => __Form(idPet: idPet);
 }
 
-class __LoginForm extends State<_LoginForm> {
+class __Form extends State<_PetForm> {
+  final int idPet;
+  __Form({required this.idPet});
   final userService = UserService();
   User user = User();
+  List<User> users = [];
 
-  Future getUser() async {
-    await userService.getUser();
-    User us = await userService.getUser();
+  Future getUsers() async {
+    await userService.getListUsers();
     setState(() {
-      user = us;
+      users = userService.users;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    getUser();
+    getUsers();
   }
+
   @override
   Widget build(BuildContext context) {
-    final loginForm = Provider.of<LoginFormProvider>(context);
-    final userService = UserService();
+    final petForm = Provider.of<PetProvider>(context);
+    final petService = PetService();
+
+    List<User> options = [];
+    if (users.isNotEmpty) {
+      for (var i = 0; i < users.length; i++) {
+        options.add(users[i]);
+      }
+    }
 
     return Container(
       child: Form(
-        key: loginForm.formKey,
+        key: petForm.formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           children: [
-            SizedBox(height: 15),
             TextFormField(
               autocorrect: false,
               maxLength: 12,
-              initialValue: user.name,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecorations.authInputDecoration(
+                  hintText: 'Animal...',
+                  labelText: 'Animal',
+                  prefixIcon: Icons.pets),
+              onChanged: (value) => petForm.animal = value,
+              maxLines: null,
+            ),
+            SizedBox(height: 10),
+            TextFormField(
+              autocorrect: false,
+              maxLength: 12,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecorations.authInputDecoration(
+                  hintText: 'Breed...',
+                  labelText: 'Breed',
+                  prefixIcon: Icons.pets),
+              onChanged: (value) => petForm.breed = value,
+              maxLines: null,
+            ),
+            SizedBox(height: 10),
+            TextFormField(
+              autocorrect: false,
+              maxLength: 12,
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecorations.authInputDecoration(
                   hintText: 'Name...',
                   labelText: 'Name',
                   prefixIcon: Icons.abc),
-              onChanged: (value) => loginForm.name = value,
+              onChanged: (value) => petForm.name = value,
+              maxLines: null,
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 10),
             TextFormField(
               autocorrect: false,
-              maxLength: 12,
-              initialValue: user.surname,
-              keyboardType: TextInputType.text,
+              maxLength: 2,
+              keyboardType: TextInputType.number,
               decoration: InputDecorations.authInputDecoration(
-                  hintText: 'Surname...',
-                  labelText: 'Surname',
-                  prefixIcon: Icons.account_circle_sharp),
-              onChanged: (value) => loginForm.surname = value,
+                hintText: 'Age...',
+                labelText: 'Age',
+                prefixIcon: Icons.numbers,
+              ),
+              onChanged: (value) {
+                try {
+                  petForm.age = int.parse(value);
+                } catch (e) {
+                  customToast(
+                      'Invalid age. Please enter a valid number.', context);
+                }
+              },
+              maxLines: null,
             ),
-            SizedBox(height: 15),
-            TextFormField(
-              autocorrect: false,
-              maxLength: 12,
-              initialValue: user.username,
-              keyboardType: TextInputType.text,
-              decoration: InputDecorations.authInputDecoration(
-                  hintText: 'Username...',
-                  labelText: 'Username',
-                  prefixIcon: Icons.account_circle_sharp),
-              onChanged: (value) => loginForm.username = value,
-            ),
-            SizedBox(height: 15),
-            TextFormField(
-              autocorrect: false,
-              obscureText: true,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecorations.authInputDecoration(
-                  hintText: '******',
-                  labelText: 'Password',
-                  prefixIcon: Icons.lock_outline),
-              onChanged: (value) => loginForm.password = value,
-            ),
-            SizedBox(height: 15),
+            SizedBox(height: 30),
             MaterialButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -211,44 +247,46 @@ class __LoginForm extends State<_LoginForm> {
                 child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                     child: Text(
-                      loginForm.isLoading ? 'Wait' : 'Update',
+                      petForm.isLoading ? 'Wait' : 'Update',
                       style: TextStyle(color: Colors.white),
                     )),
-                onPressed: loginForm.isLoading
+                onPressed: petForm.isLoading
                     ? null
                     : () async {
                         FocusScope.of(context).unfocus();
-                        if (loginForm.username.isEmpty ||
-                            loginForm.password.isEmpty ||
-                            loginForm.name.isEmpty ||
-                            loginForm.surname.isEmpty) {
+                        if (petForm.age == 0 ||
+                            petForm.animal.isEmpty ||
+                            petForm.breed.isEmpty ||
+                            petForm.name.isEmpty ||
+                            petForm.idUser == null) {
                           customToast("Fields can't be empty", context);
                         } else {
-                          final authService =
-                              Provider.of<AuthService>(context, listen: false);
+                          final petService =
+                              Provider.of<PetService>(context, listen: false);
 
-                          if (!loginForm.isValidForm()) return;
+                          if (!petForm.isValidForm()) return;
 
-                          loginForm.isLoading = true;
+                          petForm.isLoading = true;
 
-                          final String? errorMessage = await userService.update(
-                              loginForm.name,
-                              loginForm.surname,
-                              loginForm.username,
-                              loginForm.password);
+                          final String? errorMessage = await petService.update(
+                              idPet,
+                              petForm.age,
+                              petForm.name,
+                              petForm.animal,
+                              petForm.breed);
 
-                          if (errorMessage == '201') {
-                            customToast('Info updated', context);
+                          if (errorMessage == '200') {
+                            customToast('Updated', context);
                             Navigator.pushReplacementNamed(
-                                context, 'userscreen');
+                                context, 'petscreen');
                           } else if (errorMessage == '500') {
-                            customToast('Username is already in use', context);
-                            loginForm.isLoading = false;
+                            customToast('Error updating pet', context);
+                            petForm.isLoading = false;
                           } else {
                             customToast('Server error', context);
                           }
                         }
-                      }),
+                      })
           ],
         ),
       ),
@@ -256,31 +294,31 @@ class __LoginForm extends State<_LoginForm> {
   }
 
   void customToast(String message, BuildContext context) {
-  showToast(
-    message,
-    textStyle: const TextStyle(
-      fontSize: 16,
-      color: Color.fromARGB(255, 36, 57, 247),
-      fontWeight: FontWeight.bold,
-    ),
-    textPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-    fullWidth: true,
-    toastHorizontalMargin: 40,
-    borderRadius: const BorderRadius.only(
-      topLeft: Radius.circular(30),
-      topRight: Radius.circular(0),
-      bottomLeft: Radius.circular(0),
-      bottomRight: Radius.circular(30),
-    ),
-    backgroundColor: Colors.white,
-    alignment: Alignment.bottomCenter,
-    position: StyledToastPosition.bottom,
-    duration: const Duration(seconds: 3),
-    animation: StyledToastAnimation.slideToTop,
-    reverseAnimation: StyledToastAnimation.slideToBottom,
-    curve: Curves.easeInOut,
-    reverseCurve: Curves.easeInOut,
-    context: context,
-  );
-}
+    showToast(
+      message,
+      textStyle: const TextStyle(
+        fontSize: 16,
+        color: Color.fromARGB(255, 36, 57, 247),
+        fontWeight: FontWeight.bold,
+      ),
+      textPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      fullWidth: true,
+      toastHorizontalMargin: 40,
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(30),
+        topRight: Radius.circular(0),
+        bottomLeft: Radius.circular(0),
+        bottomRight: Radius.circular(30),
+      ),
+      backgroundColor: Colors.white,
+      alignment: Alignment.bottomCenter,
+      position: StyledToastPosition.bottom,
+      duration: const Duration(seconds: 3),
+      animation: StyledToastAnimation.slideToTop,
+      reverseAnimation: StyledToastAnimation.slideToBottom,
+      curve: Curves.easeInOut,
+      reverseCurve: Curves.easeInOut,
+      context: context,
+    );
+  }
 }

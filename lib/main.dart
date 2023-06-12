@@ -90,6 +90,12 @@ class MyApp extends StatelessWidget {
               builder: (context) => NewAppointmentScreen(idPet: id),
             );
           }
+          else if(settings.name == 'updatepetscreen'){
+            final int id = settings.arguments as int;
+            return MaterialPageRoute(
+              builder: (context) => UpdatePetScreen(idPet: id),
+            );
+          }
           return null;
         },
         routes: {
